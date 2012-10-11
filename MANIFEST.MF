@@ -1,0 +1,12 @@
+Main-Class: au.radsoft.example.console.Test
+Class-Path: libs/jna.jar jna.jar
+Name: Rad Console
+Specification-Title: Rad Console
+Specification-Version: 1.0
+Specification-Vendor: Radsoft
+Implementation-Title: Rad Console
+Implementation-Version: 1.0
+Implementation-Vendor: Radsoft
+Package-Title: Rad Console
+Package-Version: 1.0
+Package-Vendor: Radsoft
