@@ -56,9 +56,11 @@ public class Win32Console implements au.radsoft.console.Console {
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
         WinCon.INSTANCE.SetConsoleTitle(title);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
+                (short) 0, (short) 0, (short) 1, (short) 1));
         WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, new COORD(
                 (short) w, (short) h));
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
+                (short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
     }
 
     static short convert(Color fg, Color bg) {
