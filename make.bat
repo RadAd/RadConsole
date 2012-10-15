@@ -5,4 +5,4 @@ set MYJAR=bin\RadConsole.jar
 
 xcopy /I /D libs\* bin
 
-call %DROPBOX_DIR%\Current\Development\Java\javamake.bat %*
+call "%DROPBOX_DIR%\Current\Development\Java\javamake.bat" %*
