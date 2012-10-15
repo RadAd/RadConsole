@@ -1,5 +1,5 @@
 Main-Class: au.radsoft.example.console.Test
-Class-Path: libs/jna.jar jna.jar
+Class-Path: jna.jar
 Name: Rad Console
 Specification-Title: Rad Console
 Specification-Version: 1.0
