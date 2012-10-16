@@ -9,6 +9,10 @@ public interface Console {
     int width();
 
     int height();
+    
+    int mousex();
+
+    int mousey();
 
     void cls();
 

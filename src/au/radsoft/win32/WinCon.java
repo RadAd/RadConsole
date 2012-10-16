@@ -19,6 +19,15 @@ public interface WinCon extends StdCallLibrary {
     public static final int STD_OUTPUT_HANDLE = -11;
     public static final int STD_ERROR_HANDLE = -12;
 
+    public static final int ENABLE_PROCESSED_INPUT = 0x0001;
+    public static final int ENABLE_LINE_INPUT = 0x0002;
+    public static final int ENABLE_ECHO_INPUT = 0x0004;
+    public static final int ENABLE_WINDOW_INPUT = 0x0008;
+    public static final int ENABLE_MOUSE_INPUT = 0x0010;
+    public static final int ENABLE_INSERT_MODE = 0x0020;
+    public static final int ENABLE_QUICK_EDIT_MODE = 0x0040;
+    public static final int ENABLE_EXTENDED_FLAGS = 0x0080;
+    
     // HANDLE WINAPI GetStdHandle(
     // __in DWORD nStdHandle
     // );
@@ -57,6 +66,14 @@ public interface WinCon extends StdCallLibrary {
     // _Out_ PCONSOLE_CURSOR_INFO lpConsoleCursorInfo);
     void GetConsoleCursorInfo(Pointer in_hConsoleOutput,
             CONSOLE_CURSOR_INFO.ByReference out_lpConsoleCursorInfo)
+            throws LastErrorException;
+
+    // BOOL WINAPI GetConsoleMode(
+    //   _In_   HANDLE hConsoleHandle,
+    //   _Out_  LPDWORD lpMode);
+    void GetConsoleMode(
+      Pointer in_hConsoleOutput,
+      IntByReference out_lpMode)
             throws LastErrorException;
 
     // BOOL WINAPI GetConsoleScreenBufferInfo(
@@ -98,6 +115,13 @@ public interface WinCon extends StdCallLibrary {
     // _In_ COORD dwCursorPosition);
     public void SetConsoleCursorPosition(Pointer in_hConsoleOutput,
             COORD in_dwCursorPosition) throws LastErrorException;
+
+    // BOOL WINAPI SetConsoleMode(
+    //   _In_  HANDLE hConsoleHandle,
+    //   _In_  DWORD dwMode);
+    void SetConsoleMode(
+      Pointer in_hConsoleOutput,
+      int in_dwMode) throws LastErrorException;
 
     // BOOL WINAPI SetConsoleScreenBufferSize(
     // __in HANDLE hConsoleOutput,

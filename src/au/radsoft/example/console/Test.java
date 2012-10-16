@@ -96,10 +96,11 @@ public class Test {
 
         boolean exit = false;
         while (!exit && console.isvalid()) {
+            console.write(1, 3, "Mouse: " + console.mousex() + "," + console.mousey() + "         ", Color.TEAL, Color.BLACK);
             console.write(x, y, '@', Color.WHITE, Color.BLACK);
 
             CharKey c = console.getkey();
-            System.err.println("c: " + c);
+            //System.err.println("c: " + c);
 
             console.write(x, y, '+', Color.WHITE, Color.BLACK);
 
@@ -126,6 +127,15 @@ public class Test {
             case S:
                 if (y < console.height() - 1)
                     y++;
+                break;
+            case MOUSE_BUTTON1:
+                console.write(console.mousex(), console.mousey(), '*', Color.WHITE, Color.BLACK);
+                break;
+            case MOUSE_BUTTONR:
+                console.write(console.mousex(), console.mousey(), '=', Color.WHITE, Color.BLACK);
+                break;
+            case MOUSE_BUTTON2:
+                console.write(console.mousex(), console.mousey(), '%', Color.WHITE, Color.BLACK);
                 break;
             default:
                 break;

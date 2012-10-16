@@ -12,6 +12,17 @@ import com.sun.jna.Structure;
 //   DWORD dwEventFlags;
 // } MOUSE_EVENT_RECORD;
 public class MOUSE_EVENT_RECORD extends Structure {
+    public static final short MOUSE_MOVED = 0x0001;
+    public static final short DOUBLE_CLICK = 0x0002;
+    public static final short MOUSE_WHEELED = 0x0004;
+    public static final short MOUSE_HWHEELED = 0x0008;
+    
+    public static final short FROM_LEFT_1ST_BUTTON_PRESSED = 0x0001;
+    public static final short RIGHTMOST_BUTTON_PRESSED = 0x0002;
+    public static final short FROM_LEFT_2ND_BUTTON_PRESSED = 0x0004;
+    public static final short FROM_LEFT_3RD_BUTTON_PRESSED = 0x0008;
+    public static final short FROM_LEFT_4TH_BUTTON_PRESSED = 0x0010;
+    
     public COORD dwMousePosition;
     public int dwButtonState;
     public int dwControlKeyState;

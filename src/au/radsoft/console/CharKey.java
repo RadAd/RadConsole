@@ -105,7 +105,12 @@ public enum CharKey {
     F9,
     F10,
     F11,
-    F12;
+    F12,
+    
+    MOUSE_MOVED,
+    MOUSE_BUTTON1,
+    MOUSE_BUTTONR,
+    MOUSE_BUTTON2;
 
     public final char c;
 
