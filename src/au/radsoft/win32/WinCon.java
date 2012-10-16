@@ -59,6 +59,14 @@ public interface WinCon extends StdCallLibrary {
             CONSOLE_CURSOR_INFO.ByReference out_lpConsoleCursorInfo)
             throws LastErrorException;
 
+    // BOOL WINAPI GetConsoleScreenBufferInfo(
+    // _In_   HANDLE hConsoleOutput,
+    // _Out_  PCONSOLE_SCREEN_BUFFER_INFO lpConsoleScreenBufferInfo);
+    void GetConsoleScreenBufferInfo(
+        Pointer in_hConsoleOutput,
+        CONSOLE_SCREEN_BUFFER_INFO out_lpConsoleScreenBufferInfo)
+            throws LastErrorException;
+
     // BOOL WINAPI GetNumberOfConsoleInputEvents(
     // _In_ HANDLE hConsoleInput,
     // _Out_ LPDWORD lpcNumberOfEvents);

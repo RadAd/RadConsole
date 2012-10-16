@@ -8,6 +8,7 @@ import com.sun.jna.ptr.IntByReference;
 
 import au.radsoft.win32.CHAR_INFO;
 import au.radsoft.win32.CONSOLE_CURSOR_INFO;
+import au.radsoft.win32.CONSOLE_SCREEN_BUFFER_INFO;
 import au.radsoft.win32.COORD;
 import au.radsoft.win32.INPUT_RECORD;
 import au.radsoft.win32.KEY_EVENT_RECORD;
@@ -22,8 +23,9 @@ import au.radsoft.console.Color;
 import au.radsoft.console.Window;
 
 public class Win32Console implements au.radsoft.console.Console {
-    private Pointer hStdOutput;
-    private Pointer hStdInput;
+    private final CONSOLE_SCREEN_BUFFER_INFO savedcsbi = new CONSOLE_SCREEN_BUFFER_INFO();
+    private final Pointer hStdOutput;
+    private final Pointer hStdInput;
     private int w;
     private int h;
 
@@ -53,6 +55,7 @@ public class Win32Console implements au.radsoft.console.Console {
                 FileAPI.OPEN_EXISTING, 0, Pointer.NULL);
         // System.err.println("hStdOutput: " + hStdOutput);
 
+        WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
         WinCon.INSTANCE.SetConsoleTitle(title);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
@@ -468,6 +471,10 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void close() {
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
+                (short) 0, (short) 0, (short) 1, (short) 1));
+        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, savedcsbi.dwSize);
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, savedcsbi.srWindow);
         showcursor(true);
         cls();
     }
