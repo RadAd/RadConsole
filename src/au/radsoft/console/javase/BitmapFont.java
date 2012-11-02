@@ -13,9 +13,9 @@ public class BitmapFont {
 
     private final static Color defColor_ = Color.WHITE;
     private final static java.net.URL fontUrl_ = BitmapFont.class
-            .getResource("/font_default.png");
-    private final static int fontWidth_ = 32;
-    private final static int fontHeight_ = 8;
+            .getResource("/font8x12.png");
+    private final static int fontWidth_ = 16;
+    private final static int fontHeight_ = 16;
 
     public BitmapFont() throws java.io.IOException {
         font_ = javax.imageio.ImageIO.read(fontUrl_);
