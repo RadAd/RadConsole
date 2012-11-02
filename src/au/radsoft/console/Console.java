@@ -10,6 +10,8 @@ public interface Console {
 
     int height();
     
+    void mouse(boolean enable);
+    
     int mousex();
 
     int mousey();

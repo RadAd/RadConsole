@@ -360,6 +360,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     private final java.util.concurrent.BlockingQueue<CharKey> keys_ = new java.util.concurrent.ArrayBlockingQueue<CharKey>(
             100);
     private final Cursor cursor;
+    private boolean mouse = false;
     private int mousex = -1;
     private int mousey = -1;
 
@@ -425,26 +426,28 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     @Override
     // from java.awt.Canvas
     protected void processMouseEvent(MouseEvent e) {
-        try {
-            // System.err.println("processMouseEvent: " + e);
-            //if (e.getID() == MouseEvent.MOUSE_CLICKED)
-            if (e.getID() == MouseEvent.MOUSE_RELEASED)
-            {
-                if (e.getButton() == 1)
-                    keys_.put(CharKey.MOUSE_BUTTON1);
-                if (e.getButton() == 2)
-                    keys_.put(CharKey.MOUSE_BUTTON2);
-                if (e.getButton() == 3)
-                    keys_.put(CharKey.MOUSE_BUTTONR);
+        if (mouse) {
+            try {
+                // System.err.println("processMouseEvent: " + e);
+                //if (e.getID() == MouseEvent.MOUSE_CLICKED)
+                if (e.getID() == MouseEvent.MOUSE_RELEASED)
+                {
+                    if (e.getButton() == 1)
+                        keys_.put(CharKey.MOUSE_BUTTON1);
+                    if (e.getButton() == 2)
+                        keys_.put(CharKey.MOUSE_BUTTON2);
+                    if (e.getButton() == 3)
+                        keys_.put(CharKey.MOUSE_BUTTONR);
+                }
+            } catch (InterruptedException ex) {
             }
-        } catch (InterruptedException ex) {
         }
     }
 
     @Override
     // from java.awt.Canvas
     protected void processMouseMotionEvent(MouseEvent e) {
-        try {
+        if (mouse) {
             // System.err.println("processMouseMotionEvent: " + e);
             // TODO dont update mouse position until event is processed in getkey
             final int w = getWidth();
@@ -458,8 +461,10 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             
             mousex = (e.getX() - xo)/tw;
             mousey = (e.getY() - yo)/th;
-            keys_.put(CharKey.MOUSE_MOVED);
-        } catch (InterruptedException ex) {
+            try {
+                keys_.put(CharKey.MOUSE_MOVED);
+            } catch (InterruptedException ex) {
+            }
         }
     }
     
@@ -508,6 +513,12 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         return asciiData_.height();
     }
 
+    @Override
+    // from au.radsoft.console.Console
+    public void mouse(boolean enable) {
+        mouse = enable;
+    }
+    
     @Override
     // from au.radsoft.console.Console
     public int mousex() {

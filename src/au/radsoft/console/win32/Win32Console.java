@@ -60,9 +60,6 @@ public class Win32Console implements au.radsoft.console.Console {
         // System.err.println("hStdOutput: " + hStdOutput);
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
-        IntByReference mode = new IntByReference();
-        WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
-        WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() | WinCon.ENABLE_MOUSE_INPUT);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
         WinCon.INSTANCE.SetConsoleTitle(title);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
@@ -307,6 +304,17 @@ public class Win32Console implements au.radsoft.console.Console {
     // from au.radsoft.console.Console
     public int height() {
         return h;
+    }
+    
+    @Override
+    // from au.radsoft.console.Console
+    public void mouse(boolean enable) {
+        IntByReference mode = new IntByReference();
+        WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
+        if (enable)
+            WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() | WinCon.ENABLE_MOUSE_INPUT);
+        else
+            WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() & ~WinCon.ENABLE_MOUSE_INPUT);
     }
 
     @Override

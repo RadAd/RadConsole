@@ -88,6 +88,7 @@ public class Test {
     static void test1(Console console) {
         console.cls();
         console.setcursor(3, 1);
+        console.mouse(true);
         console.showcursor(false);
         console.write(1, 1, "Press esc to exit.", Color.TEAL, Color.BLACK);
 
