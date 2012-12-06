@@ -54,9 +54,10 @@ public class Win32Console implements au.radsoft.console.Console {
                 FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
                 FileAPI.FILE_SHARE_WRITE, Pointer.NULL, FileAPI.OPEN_EXISTING,
                 0, Pointer.NULL);
-        hStdInput = FileAPI.INSTANCE.CreateFile("CONIN$", FileAPI.GENERIC_READ
-                | FileAPI.GENERIC_WRITE, FileAPI.FILE_SHARE_READ, Pointer.NULL,
-                FileAPI.OPEN_EXISTING, 0, Pointer.NULL);
+        hStdInput = FileAPI.INSTANCE.CreateFile("CONIN$",
+                FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
+                FileAPI.FILE_SHARE_READ, Pointer.NULL, FileAPI.OPEN_EXISTING,
+                0, Pointer.NULL);
         // System.err.println("hStdOutput: " + hStdOutput);
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
@@ -287,10 +288,8 @@ public class Win32Console implements au.radsoft.console.Console {
     public void cls() {
         COORD pos = new COORD((short) 0, (short) 0);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, ' ', w * h, pos,
-                r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput,
-                convert(Color.WHITE, Color.BLACK), w * h, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, ' ', w * h, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(Color.WHITE, Color.BLACK), w * h, pos, r);
         WinCon.INSTANCE.SetConsoleCursorPosition(hStdOutput, pos);
     }
 
@@ -351,10 +350,8 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos,
-                    r);
-            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput,
-                    convert(Color.WHITE, Color.BLACK), w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -366,8 +363,7 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos,
-                    r);
+            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -379,8 +375,7 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput,
-                    convert(Color.WHITE, Color.BLACK), w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -390,32 +385,26 @@ public class Win32Console implements au.radsoft.console.Console {
     public void write(int x, int y, char[] ch) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length,
-                pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length, pos, r);
     }
     public void write(int x, int y, byte[] ch) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length,
-                pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length, pos, r);
     }
 
     // @Override
     public void write(int x, int y, char[] ch, Color fg, Color bg) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length,
-                pos, r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg),
-                ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), ch.length, pos, r);
     }
     public void write(int x, int y, byte[] ch, Color fg, Color bg) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length,
-                pos, r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg),
-                ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), ch.length, pos, r);
     }
 
     @Override
@@ -454,8 +443,7 @@ public class Win32Console implements au.radsoft.console.Console {
         WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput, chars, new COORD(
                 (short) w.width(), (short) w.height()), new COORD((short) 0,
                 (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + w.height()),
-                        (short) (x + w.width())));
+                new SMALL_RECT((short) y, (short) x, (short) (y + w.height()), (short) (x + w.width())));
     }
 
     @Override
@@ -534,8 +522,7 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void close() {
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) 1, (short) 1));
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT((short) 0, (short) 0, (short) 1, (short) 1));
         WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, savedcsbi.dwSize);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, savedcsbi.srWindow);
         showcursor(true);
