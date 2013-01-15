@@ -6,6 +6,7 @@ package au.radsoft.console.javase;
 import au.radsoft.console.CharInfo;
 import au.radsoft.console.CharKey;
 import au.radsoft.console.Color;
+import au.radsoft.console.Event;
 import au.radsoft.console.Window;
 
 import java.awt.event.KeyEvent;
@@ -298,6 +299,21 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         }
     }
 
+    private static CharKey convertButton(int b) {
+        switch (b)
+        {
+        default:
+        case 1:
+            return CharKey.MOUSE_BUTTON1;
+            
+        case 2:
+            return CharKey.MOUSE_BUTTONR;
+            
+        case 3:
+            return CharKey.MOUSE_BUTTON2;
+        }
+    }
+    
     class Cursor extends Thread {
         private volatile boolean exit = false;
         private volatile boolean show = true;
@@ -357,8 +373,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     private final Window asciiData_;
     private final BitmapFont bf_;
-    private final java.util.concurrent.BlockingQueue<CharKey> keys_ = new java.util.concurrent.ArrayBlockingQueue<CharKey>(
-            100);
+    private final java.util.concurrent.BlockingQueue<Event> events_ = new java.util.concurrent.ArrayBlockingQueue<Event>(100);
     private final Cursor cursor;
     private boolean mouse = false;
     private int mousex = -1;
@@ -418,7 +433,9 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         try {
             // System.err.println("processKeyEvent: " + e);
             if (e.getID() == KeyEvent.KEY_PRESSED)
-                keys_.put(convertKey(e.getKeyCode()));
+                events_.put(new Event(convertKey(e.getKeyCode()), Event.State.PRESSED));
+            else if (e.getID() == KeyEvent.KEY_RELEASED)
+                events_.put(new Event(convertKey(e.getKeyCode()), Event.State.RELEASED));
         } catch (InterruptedException ex) {
         }
     }
@@ -432,12 +449,11 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                 //if (e.getID() == MouseEvent.MOUSE_CLICKED)
                 if (e.getID() == MouseEvent.MOUSE_RELEASED)
                 {
-                    if (e.getButton() == 1)
-                        keys_.put(CharKey.MOUSE_BUTTON1);
-                    if (e.getButton() == 2)
-                        keys_.put(CharKey.MOUSE_BUTTON2);
-                    if (e.getButton() == 3)
-                        keys_.put(CharKey.MOUSE_BUTTONR);
+                    events_.put(new Event(convertButton(e.getButton()), Event.State.RELEASED));
+                }
+                else if (e.getID() == MouseEvent.MOUSE_PRESSED)
+                {
+                    events_.put(new Event(convertButton(e.getButton()), Event.State.PRESSED));
                 }
             } catch (InterruptedException ex) {
             }
@@ -462,7 +478,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             mousex = (e.getX() - xo)/tw;
             mousey = (e.getY() - yo)/th;
             try {
-                keys_.put(CharKey.MOUSE_MOVED);
+                events_.put(new Event(CharKey.MOUSE_MOVED, Event.State.NONE));
             } catch (InterruptedException ex) {
             }
         }
@@ -598,6 +614,22 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         asciiData_.write(x, y, w);
         repaint();
     }
+    
+    public CharKey getkeyhelper(Event e) {
+        if (e.key == CharKey.MOUSE_BUTTON1 || e.key == CharKey.MOUSE_BUTTON2 || e.key == CharKey.MOUSE_BUTTONR)
+        {
+            if (e.state == Event.State.RELEASED)
+                return e.key;
+            else
+                return null;
+        }
+        else if (e.key == CharKey.MOUSE_MOVED)
+            return e.key;
+        else if (e.state == Event.State.PRESSED)
+            return e.key;
+        else
+            return null;
+    }
 
     @Override
     // from au.radsoft.console.Console
@@ -605,7 +637,11 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         try {
             CharKey ck = null;
             while (ck == null && isvalid())
-                ck = keys_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+            {
+                Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+                if (e != null)
+                    ck = getkeyhelper(e);
+            }
             return ck == null ? CharKey.NONE : ck;
         } catch (InterruptedException e) {
             return CharKey.NONE;
@@ -616,11 +652,15 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     // from au.radsoft.console.Console
     public CharKey getkeynowait() {
         try {
-            synchronized(keys_) {
+            synchronized(events_) {
                 CharKey ck = null;
-                if (!keys_.isEmpty()) {
+                if (!events_.isEmpty()) {
                     while (ck == null && isvalid())
-                        ck = keys_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+                    {
+                        Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+                        if (e != null)
+                            ck = getkeyhelper(e);
+                    }
                 }
                 return ck;
             }
