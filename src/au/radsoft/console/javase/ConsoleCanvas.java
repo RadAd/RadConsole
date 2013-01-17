@@ -671,6 +671,40 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
+    public Event getevent() {
+        try {
+            Event e = null;
+            while (e == null && isvalid())
+            {
+                e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+            }
+            return e;
+        } catch (InterruptedException e) {
+            return null;
+        }
+    }
+
+    @Override
+    // from au.radsoft.console.Console
+    public Event geteventnowait() {
+        try {
+            synchronized(events_) {
+                Event e = null;
+                if (!events_.isEmpty()) {
+                    while (e == null && isvalid())
+                    {
+                        e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+                    }
+                }
+                return e;
+            }
+        } catch (InterruptedException e) {
+            return null;
+        }
+    }
+
+    @Override
+    // from au.radsoft.console.Console
     public void close() {
         cursor.stopWait();
         java.awt.Window w = (java.awt.Window) getParent();

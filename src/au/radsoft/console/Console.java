@@ -40,5 +40,9 @@ public interface Console {
 
     CharKey getkeynowait();
 
+    Event getevent();
+
+    Event geteventnowait();
+
     void close();
 }
