@@ -44,5 +44,7 @@ public interface Console {
 
     Event geteventnowait();
 
+    boolean getkeydown(CharKey key);
+    
     void close();
 }

@@ -3,7 +3,15 @@
 
 package au.radsoft.win32;
 
-public interface WinUser {
+import com.sun.jna.Native;
+import com.sun.jna.win32.StdCallLibrary;
+import com.sun.jna.win32.W32APIOptions;
+
+public interface WinUser extends StdCallLibrary {
+    public static final String name = "user32";
+    public static final WinUser INSTANCE = (WinUser) Native.loadLibrary(name,
+            WinUser.class, W32APIOptions.UNICODE_OPTIONS);
+            
     public static final int VK_LBUTTON = 0x01;
     public static final int VK_RBUTTON = 0x02;
     public static final int VK_CANCEL = 0x03;
@@ -195,4 +203,11 @@ public interface WinUser {
     public static final int VK_PA1 = 0xFD;
     public static final int VK_OEM_CLEAR = 0xFE;
 
+    // SHORT WINAPI GetAsyncKeyState(
+    // _In_  int vKey);
+    public short GetAsyncKeyState(int vKey);
+
+    // SHORT WINAPI GetKeyState(
+    // _In_  int vKey);
+    public short GetKeyState(int vKey);
 }

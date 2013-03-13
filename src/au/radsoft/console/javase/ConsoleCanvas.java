@@ -374,6 +374,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     private final Window asciiData_;
     private final BitmapFont bf_;
     private final java.util.concurrent.BlockingQueue<Event> events_ = new java.util.concurrent.ArrayBlockingQueue<Event>(100);
+    private final boolean down_[] = new boolean[CharKey.values().length];
     private final Cursor cursor;
     private boolean mouse = false;
     private int mousex = -1;
@@ -433,9 +434,17 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         try {
             // System.err.println("processKeyEvent: " + e);
             if (e.getID() == KeyEvent.KEY_PRESSED)
-                events_.put(new Event(convertKey(e.getKeyCode()), Event.State.PRESSED));
+            {
+                CharKey key = convertKey(e.getKeyCode());
+                down_[key.ordinal()] = true;
+                events_.put(new Event(key, Event.State.PRESSED));
+            }
             else if (e.getID() == KeyEvent.KEY_RELEASED)
-                events_.put(new Event(convertKey(e.getKeyCode()), Event.State.RELEASED));
+            {
+                CharKey key = convertKey(e.getKeyCode());
+                down_[key.ordinal()] = false;
+                events_.put(new Event(key, Event.State.RELEASED));
+            }
         } catch (InterruptedException ex) {
         }
     }
@@ -449,11 +458,15 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                 //if (e.getID() == MouseEvent.MOUSE_CLICKED)
                 if (e.getID() == MouseEvent.MOUSE_RELEASED)
                 {
-                    events_.put(new Event(convertButton(e.getButton()), Event.State.RELEASED));
+                    CharKey key = convertButton(e.getButton());
+                    down_[key.ordinal()] = false;
+                    events_.put(new Event(key, Event.State.RELEASED));
                 }
                 else if (e.getID() == MouseEvent.MOUSE_PRESSED)
                 {
-                    events_.put(new Event(convertButton(e.getButton()), Event.State.PRESSED));
+                    CharKey key = convertButton(e.getButton());
+                    down_[key.ordinal()] = true;
+                    events_.put(new Event(key, Event.State.PRESSED));
                 }
             } catch (InterruptedException ex) {
             }
@@ -703,6 +716,12 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         }
     }
 
+    @Override
+    // from au.radsoft.console.Console
+    public boolean getkeydown(CharKey key) {
+        return down_[key.ordinal()];
+    }
+    
     @Override
     // from au.radsoft.console.Console
     public void close() {

@@ -35,7 +35,7 @@ public class Win32Console implements au.radsoft.console.Console {
     private int mousebutton = 0;
 
     public static Win32Console create(String title, int w, int h) {
-        if (WinCon.INSTANCE == null)
+        if (WinCon.INSTANCE == null || WinUser.INSTANCE == null)
             return null;
         else
             return new Win32Console(title, w, h);
@@ -278,6 +278,208 @@ public class Win32Console implements au.radsoft.console.Console {
         }
     }
 
+    private static int convertKey(CharKey key) {
+        switch (key) {
+        case ENTER:
+            return WinUser.VK_RETURN;
+        case BACK_SPACE:
+            return WinUser.VK_BACK;
+        case TAB:
+            return WinUser.VK_TAB;
+        case CAPS_LOCK:
+            return WinUser.VK_CAPITAL;
+        case NUM_LOCK:
+            return WinUser.VK_NUMLOCK;
+        case ESCAPE:
+            return WinUser.VK_ESCAPE;
+        case INSERT:
+            return WinUser.VK_INSERT;
+        case DELETE:
+            return WinUser.VK_DELETE;
+        case HOME:
+            return WinUser.VK_HOME;
+        case END:
+            return WinUser.VK_END;
+        case PAGE_UP:
+            return WinUser.VK_PRIOR;
+        case PAGE_DOWN:
+            return WinUser.VK_NEXT;
+        case SHIFT:
+            return WinUser.VK_SHIFT;
+        case CONTROL:
+            return WinUser.VK_CONTROL;
+        case ALT:
+            return WinUser.VK_MENU;
+        case LEFT:
+            return WinUser.VK_LEFT;
+        case UP:
+            return WinUser.VK_UP;
+        case RIGHT:
+            return WinUser.VK_RIGHT;
+        case DOWN:
+            return WinUser.VK_DOWN;
+        case SPACE:
+            return WinUser.VK_SPACE;
+        case COMMA:
+            return WinUser.VK_OEM_COMMA;
+        case PERIOD:
+            return WinUser.VK_OEM_PERIOD;
+        case MINUS:
+            return WinUser.VK_OEM_MINUS;
+        case EQUALS:
+            return WinUser.VK_OEM_PLUS;
+        case LEFT_BRACKET:
+            return WinUser.VK_OEM_4;
+        case RIGHT_BRACKET:
+            return WinUser.VK_OEM_6;
+        case SEMICOLON:
+            return WinUser.VK_OEM_1;
+        case QUOTE:
+            return WinUser.VK_OEM_7;
+        case SLASH:
+            return WinUser.VK_OEM_2;
+        case BACK_SLASH:
+            return WinUser.VK_OEM_5;
+        case BACK_QUOTE:
+            return WinUser.VK_OEM_3;
+        case NUM0:
+            return WinUser.VK_NUMPAD0;
+        case NUM1:
+            return WinUser.VK_NUMPAD1;
+        case NUM2:
+            return WinUser.VK_NUMPAD2;
+        case NUM3:
+            return WinUser.VK_NUMPAD3;
+        case NUM4:
+            return WinUser.VK_NUMPAD4;
+        case NUM5:
+            return WinUser.VK_NUMPAD5;
+        case NUM6:
+            return WinUser.VK_NUMPAD6;
+        case NUM7:
+            return WinUser.VK_NUMPAD7;
+        case NUM8:
+            return WinUser.VK_NUMPAD8;
+        case NUM9:
+            return WinUser.VK_NUMPAD9;
+        case CLEAR:
+            return WinUser.VK_CLEAR;
+        case DIVIDE:
+            return WinUser.VK_DIVIDE;
+        case MULTIPLY:
+            return WinUser.VK_MULTIPLY;
+        case SUBTRACT:
+            return WinUser.VK_SUBTRACT;
+        case ADD:
+            return WinUser.VK_ADD;
+        case DECIMAL:
+            return WinUser.VK_DECIMAL;
+        case N0:
+            return '0';
+        case N1:
+            return '1';
+        case N2:
+            return '2';
+        case N3:
+            return '3';
+        case N4:
+            return '4';
+        case N5:
+            return '5';
+        case N6:
+            return '6';
+        case N7:
+            return '7';
+        case N8:
+            return '8';
+        case N9:
+            return '0';
+        case A:
+            return 'A';
+        case B:
+            return 'B';
+        case C:
+            return 'C';
+        case D:
+            return 'D';
+        case E:
+            return 'E';
+        case F:
+            return 'F';
+        case G:
+            return 'G';
+        case H:
+            return 'H';
+        case I:
+            return 'I';
+        case J:
+            return 'J';
+        case K:
+            return 'K';
+        case L:
+            return 'L';
+        case M:
+            return 'M';
+        case N:
+            return 'N';
+        case O:
+            return 'O';
+        case P:
+            return 'P';
+        case Q:
+            return 'Q';
+        case R:
+            return 'R';
+        case S:
+            return 'S';
+        case T:
+            return 'T';
+        case U:
+            return 'U';
+        case V:
+            return 'V';
+        case W:
+            return 'W';
+        case X:
+            return 'X';
+        case Y:
+            return 'Y';
+        case Z:
+            return 'Z';
+        case F1:
+            return WinUser.VK_F1;
+        case F2:
+            return WinUser.VK_F2;
+        case F3:
+            return WinUser.VK_F3;
+        case F4:
+            return WinUser.VK_F4;
+        case F5:
+            return WinUser.VK_F5;
+        case F6:
+            return WinUser.VK_F6;
+        case F7:
+            return WinUser.VK_F7;
+        case F8:
+            return WinUser.VK_F8;
+        case F9:
+            return WinUser.VK_F9;
+        case F10:
+            return WinUser.VK_F10;
+        case F11:
+            return WinUser.VK_F11;
+        case F12:
+            return WinUser.VK_F12;
+        case WIN:
+            return WinUser.VK_LWIN;
+        case MENU:
+            return WinUser.VK_RWIN;
+        default:
+            System.err.println("Unknown key code: " + key);
+            return 0;
+        }
+    }
+    
     @Override
     // from au.radsoft.console.Console
     public boolean isvalid() {
@@ -603,6 +805,13 @@ public class Win32Console implements au.radsoft.console.Console {
             WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput, r);
         }
         return null;
+    }
+    
+    @Override
+    // from au.radsoft.console.Console
+    public boolean getkeydown(CharKey key) {
+        int code = convertKey(key);
+        return (WinUser.INSTANCE.GetKeyState(code) & 0x80) == 0x80;
     }
 
     @Override
