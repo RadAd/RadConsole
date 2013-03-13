@@ -667,13 +667,11 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         try {
             synchronized(events_) {
                 CharKey ck = null;
-                if (!events_.isEmpty()) {
-                    while (ck == null && isvalid())
-                    {
-                        Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
-                        if (e != null)
-                            ck = getkeyhelper(e);
-                    }
+                while (!events_.isEmpty() && ck == null && isvalid())
+                {
+                    Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
+                    if (e != null)
+                        ck = getkeyhelper(e);
                 }
                 return ck;
             }
