@@ -272,6 +272,12 @@ public class Win32Console implements au.radsoft.console.Console {
             return CharKey.WIN;
         case WinUser.VK_RWIN:
             return CharKey.MENU;
+        case WinUser.VK_LBUTTON:
+            return CharKey.MOUSE_BUTTON1;
+        case WinUser.VK_MBUTTON:
+            return CharKey.MOUSE_BUTTON2;
+        case WinUser.VK_RBUTTON:
+            return CharKey.MOUSE_BUTTONR;
         default:
             System.err.println("Unknown key code: " + code);
             return CharKey.NONE;
@@ -474,6 +480,12 @@ public class Win32Console implements au.radsoft.console.Console {
             return WinUser.VK_LWIN;
         case MENU:
             return WinUser.VK_RWIN;
+        case MOUSE_BUTTON1:
+            return WinUser.VK_LBUTTON;
+        case MOUSE_BUTTON2:
+            return WinUser.VK_MBUTTON;
+        case MOUSE_BUTTONR:
+            return WinUser.VK_RBUTTON;
         default:
             System.err.println("Unknown key code: " + key);
             return 0;
