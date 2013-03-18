@@ -307,10 +307,10 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             return CharKey.MOUSE_BUTTON1;
             
         case 2:
-            return CharKey.MOUSE_BUTTONR;
+            return CharKey.MOUSE_BUTTON2;
             
         case 3:
-            return CharKey.MOUSE_BUTTON2;
+            return CharKey.MOUSE_BUTTONR;
         }
     }
     
