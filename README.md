@@ -9,4 +9,4 @@ Create an instance:
 
     Console console = ConsoleUtils.create("Test", 80, 25, true);
 
-[Download](Bin/RadCOnsole.jar) binary package.
+[Download](bin/RadConsole.jar) binary package.
