@@ -10,12 +10,32 @@ public class CharInfo {
         bg = bgc;
     }
 
+    public CharInfo(CharInfo o) {
+        c = o.c;
+        fg = o.fg;
+        bg = o.bg;
+    }
+
     public void set(CharInfo o) {
         c = o.c;
         fg = o.fg;
         bg = o.bg;
     }
 
+    public boolean equals(CharInfo o)
+    {
+        return c == o.c && fg == o.fg && bg == o.bg;
+    }
+    
+    public boolean equals(Object o)
+    {
+        if (o instanceof CharInfo)
+            return equals((CharInfo) o);
+        else
+            return false;
+        
+    }
+    
     public char c;
     public Color fg;
     public Color bg;
