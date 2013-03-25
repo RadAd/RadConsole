@@ -627,27 +627,32 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         repaint();
     }
     
-    public CharKey getkeyhelper(Event e) {
-        if (e instanceof Event.MouseButton)
+    private static class KeyHelper implements Event.Handler
+    {
+        public void handle(Event.Key ke)
         {
-            Event.MouseButton mbe = (Event.MouseButton) e;
-            if (mbe.state == Event.State.RELEASED)
-                return mbe.key;
-            else
-                return null;
-        }
-        else if (e instanceof Event.MouseMoved)
-            return CharKey.MOUSE_MOVED;
-        else if (e instanceof Event.Key)
-        {
-            Event.Key ke = (Event.Key) e;
             if (ke.state == Event.State.PRESSED)
-                return ke.key;
-            else
-                return null;
+                key = ke.key;
         }
-        else
-            return null;
+        
+        public void handle(Event.MouseButton mbe)
+        {
+            if (mbe.state == Event.State.RELEASED)
+                key = mbe.key;
+        }
+        
+        public void handle(Event.MouseMoved mme)
+        {
+            key = CharKey.MOUSE_MOVED;;
+        }
+        
+        CharKey key = null;
+    }
+        
+    public CharKey getkeyhelper(Event e) {
+        KeyHelper kh = new KeyHelper();
+        e.handle(kh);
+        return kh.key;
     }
 
     @Override

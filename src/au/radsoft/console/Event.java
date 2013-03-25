@@ -7,12 +7,26 @@ public interface Event
 {
     public enum State { NONE, PRESSED, RELEASED };
     
+    void handle(Handler h);
+    
+    public interface Handler
+    {
+        void handle(Key ke);
+        void handle(MouseButton mbe);
+        void handle(MouseMoved mme);
+    }
+    
     public static class Key implements Event
     {
         public Key(CharKey key, State state)
         {
             this.key = key;
             this.state = state;
+        }
+        
+        public void handle(Handler h)
+        {
+            h.handle(this);
         }
         
         public final CharKey key;
@@ -27,6 +41,11 @@ public interface Event
             this.state = state;
         }
         
+        public void handle(Handler h)
+        {
+            h.handle(this);
+        }
+        
         public final CharKey key;
         public final State state;
     }
@@ -35,6 +54,11 @@ public interface Event
     {
         public MouseMoved()
         {
+        }
+        
+        public void handle(Handler h)
+        {
+            h.handle(this);
         }
     }
 }

@@ -723,6 +723,10 @@ public class Win32Console implements au.radsoft.console.Console {
                         mousebutton = me.dwButtonState;
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTON1;
+                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
+                            return CharKey.MOUSE_BUTTONR;
+                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
+                            return CharKey.MOUSE_BUTTON2;
                     }
                     else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
                         return CharKey.MOUSE_MOVED;
