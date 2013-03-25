@@ -453,18 +453,30 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         if (mouse) {
             try {
                 // System.err.println("processMouseEvent: " + e);
+                final int w = getWidth();
+                final int h = getHeight();
+                
+                final int tw = bf_.getWidth();
+                final int th = bf_.getHeight();
+
+                final int xo = Math.round((w - asciiData_.width() * tw) / 2);
+                final int yo = Math.round((h - asciiData_.height() * th) / 2);
+                
+                mousex = (e.getX() - xo)/tw;
+                mousey = (e.getY() - yo)/th;
+                
                 //if (e.getID() == MouseEvent.MOUSE_CLICKED)
                 if (e.getID() == MouseEvent.MOUSE_RELEASED)
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = false;
-                    events_.put(new Event.MouseButton(key, Event.State.RELEASED));
+                    events_.put(new Event.MouseButton(key, Event.State.RELEASED, mousex, mousey));
                 }
                 else if (e.getID() == MouseEvent.MOUSE_PRESSED)
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = true;
-                    events_.put(new Event.MouseButton(key, Event.State.PRESSED));
+                    events_.put(new Event.MouseButton(key, Event.State.PRESSED, mousex, mousey));
                 }
             } catch (InterruptedException ex) {
             }
@@ -477,19 +489,20 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         if (mouse) {
             // System.err.println("processMouseMotionEvent: " + e);
             // TODO dont update mouse position until event is processed in getkey
-            final int w = getWidth();
-            final int h = getHeight();
-            
-            final int tw = bf_.getWidth();
-            final int th = bf_.getHeight();
-
-            final int xo = Math.round((w - asciiData_.width() * tw) / 2);
-            final int yo = Math.round((h - asciiData_.height() * th) / 2);
-            
-            mousex = (e.getX() - xo)/tw;
-            mousey = (e.getY() - yo)/th;
             try {
-                events_.put(new Event.MouseMoved());
+                final int w = getWidth();
+                final int h = getHeight();
+                
+                final int tw = bf_.getWidth();
+                final int th = bf_.getHeight();
+
+                final int xo = Math.round((w - asciiData_.width() * tw) / 2);
+                final int yo = Math.round((h - asciiData_.height() * th) / 2);
+                
+                mousex = (e.getX() - xo)/tw;
+                mousey = (e.getY() - yo)/th;
+            
+                events_.put(new Event.MouseMoved(mousex, mousey));
             } catch (InterruptedException ex) {
             }
         }

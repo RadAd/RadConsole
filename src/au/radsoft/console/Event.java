@@ -35,10 +35,12 @@ public interface Event
 
     public static class MouseButton implements Event
     {
-        public MouseButton(CharKey key, State state)
+        public MouseButton(CharKey key, State state, int mx, int my)
         {
             this.key = key;
             this.state = state;
+            this.mx = mx;
+            this.my = my;
         }
         
         public void handle(Handler h)
@@ -48,17 +50,24 @@ public interface Event
         
         public final CharKey key;
         public final State state;
+        public final int mx;
+        public final int my;
     }
 
     public static class MouseMoved implements Event
     {
-        public MouseMoved()
+        public MouseMoved(int mx, int my)
         {
+            this.mx = mx;
+            this.my = my;
         }
         
         public void handle(Handler h)
         {
             h.handle(this);
         }
+        
+        public final int mx;
+        public final int my;
     }
 }

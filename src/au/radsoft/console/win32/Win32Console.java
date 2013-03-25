@@ -759,20 +759,20 @@ public class Win32Console implements au.radsoft.console.Console {
                         int origmousebutton = mousebutton;
                         mousebutton = me.dwButtonState;
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex, mousey);
                     }
                     else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
-                        return new Event.MouseMoved();
+                        return new Event.MouseMoved(mousex, mousey);
                     break;
                 }
             }
@@ -801,20 +801,20 @@ public class Win32Console implements au.radsoft.console.Console {
                         int origmousebutton = mousebutton;
                         mousebutton = me.dwButtonState;
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex, mousey);
                         if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED);
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex, mousey);
                     }
                     else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
-                        return new Event.MouseMoved();
+                        return new Event.MouseMoved(mousex, mousey);
                     break;
                 }
             }
