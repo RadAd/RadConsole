@@ -3,16 +3,38 @@
 
 package au.radsoft.console;
 
-public class Event
+public interface Event
 {
     public enum State { NONE, PRESSED, RELEASED };
     
-    public Event(CharKey key, State state)
+    public static class Key implements Event
     {
-        this.key = key;
-        this.state = state;
+        public Key(CharKey key, State state)
+        {
+            this.key = key;
+            this.state = state;
+        }
+        
+        public final CharKey key;
+        public final State state;
     }
-    
-    public final CharKey key;
-    public final State state;
+
+    public static class MouseButton implements Event
+    {
+        public MouseButton(CharKey key, State state)
+        {
+            this.key = key;
+            this.state = state;
+        }
+        
+        public final CharKey key;
+        public final State state;
+    }
+
+    public static class MouseMoved implements Event
+    {
+        public MouseMoved()
+        {
+        }
+    }
 }

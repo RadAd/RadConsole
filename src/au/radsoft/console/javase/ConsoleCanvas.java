@@ -435,13 +435,13 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             {
                 CharKey key = convertKey(e.getKeyCode());
                 down_[key.ordinal()] = true;
-                events_.put(new Event(key, Event.State.PRESSED));
+                events_.put(new Event.Key(key, Event.State.PRESSED));
             }
             else if (e.getID() == KeyEvent.KEY_RELEASED)
             {
                 CharKey key = convertKey(e.getKeyCode());
                 down_[key.ordinal()] = false;
-                events_.put(new Event(key, Event.State.RELEASED));
+                events_.put(new Event.Key(key, Event.State.RELEASED));
             }
         } catch (InterruptedException ex) {
         }
@@ -458,13 +458,13 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = false;
-                    events_.put(new Event(key, Event.State.RELEASED));
+                    events_.put(new Event.MouseButton(key, Event.State.RELEASED));
                 }
                 else if (e.getID() == MouseEvent.MOUSE_PRESSED)
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = true;
-                    events_.put(new Event(key, Event.State.PRESSED));
+                    events_.put(new Event.MouseButton(key, Event.State.PRESSED));
                 }
             } catch (InterruptedException ex) {
             }
@@ -489,7 +489,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             mousex = (e.getX() - xo)/tw;
             mousey = (e.getY() - yo)/th;
             try {
-                events_.put(new Event(CharKey.MOUSE_MOVED, Event.State.NONE));
+                events_.put(new Event.MouseMoved());
             } catch (InterruptedException ex) {
             }
         }
@@ -628,17 +628,24 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     }
     
     public CharKey getkeyhelper(Event e) {
-        if (e.key == CharKey.MOUSE_BUTTON1 || e.key == CharKey.MOUSE_BUTTON2 || e.key == CharKey.MOUSE_BUTTONR)
+        if (e instanceof Event.MouseButton)
         {
-            if (e.state == Event.State.RELEASED)
-                return e.key;
+            Event.MouseButton mbe = (Event.MouseButton) e;
+            if (mbe.state == Event.State.RELEASED)
+                return mbe.key;
             else
                 return null;
         }
-        else if (e.key == CharKey.MOUSE_MOVED)
-            return e.key;
-        else if (e.state == Event.State.PRESSED)
-            return e.key;
+        else if (e instanceof Event.MouseMoved)
+            return CharKey.MOUSE_MOVED;
+        else if (e instanceof Event.Key)
+        {
+            Event.Key ke = (Event.Key) e;
+            if (ke.state == Event.State.PRESSED)
+                return ke.key;
+            else
+                return null;
+        }
         else
             return null;
     }
