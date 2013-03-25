@@ -343,10 +343,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                     final int h = getHeight();
                     final int tw = bf_.getWidth();
                     final int th = bf_.getHeight();
-                    final int xo = Math
-                            .round((w - asciiData_.width() * tw) / 2);
-                    final int yo = Math
-                            .round((h - asciiData_.height() * th) / 2);
+                    final int xo = Math.round((w - asciiData_.width() * tw) / 2);
+                    final int yo = Math.round((h - asciiData_.height() * th) / 2);
                     int sx = xo + x * tw;
                     int sy = yo + y * th;
 
@@ -498,6 +496,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     }
     
     public void render(java.awt.Graphics g) {
+        // System.err.prinltn("Render: " + System.currentTimeMillis());
         final int w = getWidth();
         final int h = getHeight();
 
