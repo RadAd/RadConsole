@@ -6,4 +6,4 @@ set JM_PROJECT=Tetris
 set JM_DEPENDS=..\..\make.bat
 set JM_MAINCLASS=au.radsoft.tetris.Tetris
 
-call "%DROPBOX_DIR%\Current\Development\Java\javamake.bat" %*
+call ..\..\..\javamake.bat %*

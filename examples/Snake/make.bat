@@ -6,4 +6,4 @@ set JM_PROJECT=Snake
 set JM_DEPENDS=..\..\make.bat
 set JM_MAINCLASS=au.radsoft.snake.Snake
 
-call "%DROPBOX_DIR%\Current\Development\Java\javamake.bat" %*
+call ..\..\..\javamake.bat %*
