@@ -1,0 +1,11 @@
+Class-Path: RadConsole.jar
+Name: Snake
+Specification-Title: Snake
+Specification-Version: 1.0
+Specification-Vendor: Radsoft
+Implementation-Title: Snake
+Implementation-Version: 1.0
+Implementation-Vendor: Radsoft
+Package-Title: Snake
+Package-Version: 1.0
+Package-Vendor: Radsoft
