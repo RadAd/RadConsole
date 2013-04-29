@@ -1,9 +1,10 @@
 @echo off
-SETLOCAL ENABLEDELAYEDEXPANSION
+setlocal
 cd /d %~dp0
 
-set MYJAR=..\..\bin\Example1.jar
-set JAVA_LIBS=;..\..\libs\jna.jar;..\..\bin\RadConsole.jar
+set JM_PROJECT=Example1
+set JM_DEPENDS=..\..\make.bat
+set JM_INSTALL_DIR=%CD%\libs
+set JM_MAINCLASS=au.radsoft.example.console.Test
 
 call "%DROPBOX_DIR%\Current\Development\Java\javamake.bat" %*
-
