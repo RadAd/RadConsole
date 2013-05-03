@@ -63,13 +63,19 @@ public class Win32Console implements au.radsoft.console.Console {
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
-        WinCon.INSTANCE.SetConsoleTitle(title);
+        if (title != null)
+            WinCon.INSTANCE.SetConsoleTitle(title);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
                 (short) 0, (short) 0, (short) 1, (short) 1));
         WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, new COORD(
                 (short) w, (short) h));
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
                 (short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
+
+        // Disable Ctrl+C
+        IntByReference mode = new IntByReference();
+        WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
+        WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() & ~WinCon.ENABLE_PROCESSED_INPUT);
     }
 
     static short convert(Color fg, Color bg) {
@@ -634,6 +640,12 @@ public class Win32Console implements au.radsoft.console.Console {
     public void write(int x, int y, char ch, Color fg, Color bg) {
         byte[] chars = { (byte) ch };
         write(x, y, chars, fg, bg);
+    }
+
+    @Override
+    // from au.radsoft.console.Console
+    public void write(int x, int y, String s) {
+        write(x, y, s.toCharArray());
     }
 
     @Override

@@ -24,9 +24,16 @@ public interface Event
             this.state = state;
         }
         
+        @Override
         public void handle(Handler h)
         {
             h.handle(this);
+        }
+        
+        @Override
+        public String toString()
+        {
+            return super.toString() + "(" + key + ", " + state + ")";
         }
         
         public final CharKey key;
@@ -43,9 +50,16 @@ public interface Event
             this.my = my;
         }
         
+        @Override
         public void handle(Handler h)
         {
             h.handle(this);
+        }
+        
+        @Override
+        public String toString()
+        {
+            return super.toString() + "(" + key + ", " + state + ", " + mx + ", " + my + ")";
         }
         
         public final CharKey key;
@@ -62,9 +76,16 @@ public interface Event
             this.my = my;
         }
         
+        @Override
         public void handle(Handler h)
         {
             h.handle(this);
+        }
+        
+        @Override
+        public String toString()
+        {
+            return super.toString() + "(" + mx + ", " + my + ")";
         }
         
         public final int mx;

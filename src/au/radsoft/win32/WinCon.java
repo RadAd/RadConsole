@@ -99,6 +99,14 @@ public interface WinCon extends StdCallLibrary {
             INPUT_RECORD[] out_lpBuffer, int in_nLength,
             IntByReference out_lpNumberOfEventsRead) throws LastErrorException;
 
+    // BOOL WINAPI SetConsoleCtrlHandler(
+    // _In_opt_  PHANDLER_ROUTINE HandlerRoutine,
+    // _In_      BOOL Add);
+    void SetConsoleCtrlHandler(
+        Pointer in_opt_HandlerRoutine,
+        boolean in_Add)
+            throws LastErrorException;
+
     // BOOL WINAPI SetConsoleCursorInfo(
     // _In_ HANDLE hConsoleOutput,
     // _In_ const CONSOLE_CURSOR_INFO *lpConsoleCursorInfo);

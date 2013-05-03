@@ -628,6 +628,13 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
+    public void write(int x, int y, String s) {
+        asciiData_.write(x, y, s);
+        repaint();
+    }
+
+    @Override
+    // from au.radsoft.console.Console
     public void write(int x, int y, String s, Color fg, Color bg) {
         asciiData_.write(x, y, s, fg, bg);
         repaint();
