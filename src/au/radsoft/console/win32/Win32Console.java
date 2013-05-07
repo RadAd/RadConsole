@@ -526,7 +526,7 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference mode = new IntByReference();
         WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
         if (enable)
-            WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() | WinCon.ENABLE_MOUSE_INPUT);
+            WinCon.INSTANCE.SetConsoleMode(hStdInput, (mode.getValue() | WinCon.ENABLE_MOUSE_INPUT | WinCon.ENABLE_EXTENDED_FLAGS) & ~WinCon.ENABLE_QUICK_EDIT_MODE);
         else
             WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() & ~WinCon.ENABLE_MOUSE_INPUT);
     }
