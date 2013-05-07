@@ -107,6 +107,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             return CharKey.PRINTSCREEN;
         case KeyEvent.VK_PAUSE:
             return CharKey.PAUSE;
+        case KeyEvent.VK_TAB:
+            return CharKey.TAB;
         case KeyEvent.VK_ENTER:
             return CharKey.ENTER;
         case KeyEvent.VK_ESCAPE:
@@ -388,6 +390,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                 | java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
                 | java.awt.AWTEvent.MOUSE_WHEEL_EVENT_MASK);
         setBackground(java.awt.Color.black);
+        setFocusTraversalKeysEnabled(false);
         // setIgnoreRepaint(true);
 
         cursor = new Cursor();
@@ -430,7 +433,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     // from java.awt.Canvas
     protected void processKeyEvent(KeyEvent e) {
         try {
-            // System.err.println("processKeyEvent: " + e);
+            //System.err.println("processKeyEvent: " + e);
             if (e.getID() == KeyEvent.KEY_PRESSED)
             {
                 CharKey key = convertKey(e.getKeyCode());
