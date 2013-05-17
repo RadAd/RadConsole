@@ -76,6 +76,14 @@ public class Win32Console implements au.radsoft.console.Console {
         return (short) ((bg.ordinal() << 4) | fg.ordinal());
     }
 
+    static Color convertfg(short attr) {
+        return Color.values()[attr & 0xF];
+    }
+    
+    static Color convertbg(short attr) {
+        return Color.values()[(attr >> 4) & 0xF];
+    }
+    
     private static CharKey convertKey(int code) {
         switch (code) {
         case WinUser.VK_RETURN:
@@ -659,6 +667,25 @@ public class Win32Console implements au.radsoft.console.Console {
                 (short) w.width(), (short) w.height()), new COORD((short) 0,
                 (short) 0),
                 new SMALL_RECT((short) y, (short) x, (short) (y + w.height()), (short) (x + w.width())));
+    }
+    
+    @Override
+    // from au.radsoft.console.Console
+    public void read(int x, int y, Window w) {
+        CHAR_INFO[] chars = CHAR_INFO.createArray(w.width() * w.height());
+        WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput, chars, new COORD(
+                (short) w.width(), (short) w.height()), new COORD((short) 0,
+                (short) 0),
+                new SMALL_RECT((short) y, (short) x, (short) (y + w.height()), (short) (x + w.width())));
+        for (int xx = 0; xx < w.width(); ++xx) {
+            for (int yy = 0; yy < w.height(); ++yy) {
+                final CharInfo cell = w.get(xx, yy);
+                int i = xx + yy * w.width();
+                cell.c = (char) chars[i].uChar.AsciiChar;
+                cell.fg = convertfg(chars[i].Attributes);
+                cell.bg = convertbg(chars[i].Attributes);
+            }
+        }
     }
 
     @Override

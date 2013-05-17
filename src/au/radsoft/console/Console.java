@@ -36,6 +36,8 @@ public interface Console {
 
     void write(int x, int y, Window w);
 
+    void read(int x, int y, Window w);
+    
     CharKey getkey();
 
     CharKey getkeynowait();

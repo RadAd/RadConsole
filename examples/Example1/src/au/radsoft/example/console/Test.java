@@ -14,8 +14,33 @@ import java.util.Random;
 public class Test {
     public static void main(String[] args) throws Exception {
         Console console = ConsoleUtils.create("Test", 80, 25, true);
-        test2(console);
+        test4(console);
         console.close();
+    }
+    
+    static void test4(Console console) {
+        console.showcursor(false);
+        console.cls();
+        
+        java.util.Random r = new java.util.Random();
+        
+        int w = 10;
+        int h = 10;
+        
+        for (int y = 0; y < h; ++y)
+        {
+            for (int x = 0; x < w; ++x)
+            {
+                console.write(x, y, (char) r.nextInt(256), Color.values()[r.nextInt(15)], Color.values()[r.nextInt(15)]);
+            }
+        }
+        
+        Window wnd = new Window(w, h);
+        
+        console.read(0, 0, wnd);
+        console.write(w + 2, 0, wnd);
+        
+        console.getkey();
     }
 
     static void test3(Console console) {
@@ -41,8 +66,8 @@ public class Test {
         ship.cls();
         ship.write(1, 0, (char) 30);
         ship.write(1, 1, (char) (5 * 32 + 17));
-        ship.write(0, 1, (char) (7 * 32 + 19));
-        ship.write(2, 1, (char) (7 * 32 + 18));
+        ship.write(0, 1, '<');
+        ship.write(2, 1, '>');
 
         int shipx = (console.width() - ship.width()) / 2;
 

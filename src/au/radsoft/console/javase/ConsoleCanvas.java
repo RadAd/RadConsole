@@ -642,6 +642,12 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         asciiData_.write(x, y, w);
         repaint();
     }
+
+    @Override
+    // from au.radsoft.console.Console
+    public void read(int x, int y, Window w) {
+        asciiData_.read(x, y, w);
+    }
     
     private static class KeyHelper implements Event.Handler
     {

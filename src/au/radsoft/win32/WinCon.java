@@ -99,6 +99,34 @@ public interface WinCon extends StdCallLibrary {
             INPUT_RECORD[] out_lpBuffer, int in_nLength,
             IntByReference out_lpNumberOfEventsRead) throws LastErrorException;
 
+    // BOOL WINAPI ReadConsoleOutput(
+    // _In_     HANDLE hConsoleOutput,
+    // _Out_    PCHAR_INFO lpBuffer,
+    // _In_     COORD dwBufferSize,
+    // _In_     COORD dwBufferCoord,
+    // _Inout_  PSMALL_RECT lpReadRegion);
+    public void ReadConsoleOutput(Pointer in_hConsoleOutput, CHAR_INFO[] out_lpBuffer,
+            COORD in_dwBufferSize, COORD in_dwBufferCoord,
+            SMALL_RECT inout_lpReadRegion) throws LastErrorException;
+    public void ReadConsoleOutputA(Pointer in_hConsoleOutput, CHAR_INFO[] out_lpBuffer,
+            COORD in_dwBufferSize, COORD in_dwBufferCoord,
+            SMALL_RECT inout_lpReadRegion) throws LastErrorException;
+            
+    // BOOL WINAPI ReadConsoleOutputCharacter(
+    // _In_   HANDLE hConsoleOutput,
+    // _Out_  LPTSTR lpCharacter,
+    // _In_   DWORD nLength,
+    // _In_   COORD dwReadCoord,
+    // _Out_  LPDWORD lpNumberOfCharsRead);
+    public void ReadConsoleOutputCharacter(Pointer in_hConsoleOutput,
+            char[] ouy_lpCharacter, int in_nLength, COORD in_dwReadCoord,
+            IntByReference out_lpNumberOfCharsRead)
+            throws LastErrorException;
+    public void ReadConsoleOutputCharacterA(Pointer in_hConsoleOutput,
+            byte[] ouy_lpCharacter, int in_nLength, COORD in_dwReadCoord,
+            IntByReference out_lpNumberOfCharsRead)
+            throws LastErrorException;
+
     // BOOL WINAPI SetConsoleCursorInfo(
     // _In_ HANDLE hConsoleOutput,
     // _In_ const CONSOLE_CURSOR_INFO *lpConsoleCursorInfo);
