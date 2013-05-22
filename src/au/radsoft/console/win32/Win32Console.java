@@ -33,6 +33,12 @@ public class Win32Console implements au.radsoft.console.Console {
     private int mousex = -1;
     private int mousey = -1;
     private int mousebutton = 0;
+    
+    public static void realloc()
+    {
+        WinCon.INSTANCE.FreeConsole();
+        WinCon.INSTANCE.AllocConsole();
+    }
 
     public static Win32Console create(String title, int w, int h) {
         if (WinCon.INSTANCE == null || WinUser.INSTANCE == null)
@@ -59,7 +65,10 @@ public class Win32Console implements au.radsoft.console.Console {
                 FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
                 FileAPI.FILE_SHARE_READ, Pointer.NULL, FileAPI.OPEN_EXISTING,
                 0, Pointer.NULL);
-        // System.err.println("hStdOutput: " + hStdOutput);
+        //System.err.println("hStdOutput: " + hStdOutput);
+        //System.err.println("hStdInput: " + hStdInput);
+        //System.err.println("STD_OUTPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE));
+        //System.err.println("STD_INPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE));
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);

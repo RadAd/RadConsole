@@ -14,6 +14,11 @@ public class ConsoleUtils {
             c = ConsoleCanvas.create(title, w, h);
         return c;
     }
+    
+    public static void realloc()
+    {
+        Win32Console.realloc();
+    }
 
     public static void scrollup(Window w) {
         for (int xx = 0; xx < w.width(); ++xx) {
