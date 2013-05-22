@@ -20,12 +20,12 @@ public class ConsoleUtils {
         Win32Console.realloc();
     }
 
-    public static void scrollup(Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
-                final CharInfo dstcell = w.get(xx, yy);
+    public static void scrollup(Buffer b) {
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = 0; yy < b.height(); ++yy) {
+                final CharInfo dstcell = b.get(xx, yy);
                 if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy + 1);
+                    final CharInfo srccell = b.get(xx, yy + 1);
                     if (srccell != null) {
                         dstcell.set(srccell);
                     }
@@ -34,12 +34,12 @@ public class ConsoleUtils {
         }
     }
 
-    public static void scrolldown(Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = w.height(); yy > 0; --yy) {
-                final CharInfo dstcell = w.get(xx, yy - 1);
+    public static void scrolldown(Buffer b) {
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = b.height(); yy > 0; --yy) {
+                final CharInfo dstcell = b.get(xx, yy - 1);
                 if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy - 2);
+                    final CharInfo srccell = b.get(xx, yy - 2);
                     if (srccell != null) {
                         dstcell.set(srccell);
                     }

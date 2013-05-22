@@ -7,7 +7,7 @@ import au.radsoft.console.CharKey;
 import au.radsoft.console.Color;
 import au.radsoft.console.Console;
 import au.radsoft.console.ConsoleUtils;
-import au.radsoft.console.Window;
+import au.radsoft.console.Buffer;
 
 import java.util.Random;
 
@@ -35,10 +35,10 @@ public class Test {
             }
         }
         
-        Window wnd = new Window(w, h);
+        Buffer b = new Buffer(w, h);
         
-        console.read(0, 0, wnd);
-        console.write(w + 2, 0, wnd);
+        console.read(0, 0, b);
+        console.write(w + 2, 0, b);
         
         console.getkey();
     }
@@ -60,9 +60,9 @@ public class Test {
         console.showcursor(false);
         console.cls();
 
-        Window w = new Window(console.width(), console.height());
-        w.cls();
-        Window ship = new Window(3, 2);
+        Buffer b = new Buffer(console.width(), console.height());
+        b.cls();
+        Buffer ship = new Buffer(3, 2);
         ship.cls();
         ship.write(1, 0, (char) 30);
         ship.write(1, 1, (char) (5 * 32 + 17));
@@ -76,12 +76,12 @@ public class Test {
         boolean exit = false;
         while (!exit && console.isvalid()) {
             int row = 0;// w.height() - 1;
-            ConsoleUtils.scrolldown(w);
-            w.fill(0, row, w.width(), 1, ' ');
-            w.write(r.nextInt(w.width()), row, '.');
+            ConsoleUtils.scrolldown(b);
+            b.fill(0, row, b.width(), 1, ' ');
+            b.write(r.nextInt(b.width()), row, '.');
 
-            console.write(0, 0, w);
-            console.write(shipx, w.height() - ship.height(), ship);
+            console.write(0, 0, b);
+            console.write(shipx, b.height() - ship.height(), ship);
 
             CharKey c;
             if ((c = console.getkeynowait()) != null) {

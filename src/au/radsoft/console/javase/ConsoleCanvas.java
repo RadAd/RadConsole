@@ -7,7 +7,7 @@ import au.radsoft.console.CharInfo;
 import au.radsoft.console.CharKey;
 import au.radsoft.console.Color;
 import au.radsoft.console.Event;
-import au.radsoft.console.Window;
+import au.radsoft.console.Buffer;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -371,7 +371,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         }
     }
 
-    private final Window asciiData_;
+    private final Buffer asciiData_;
     private final BitmapFont bf_;
     private final java.util.concurrent.BlockingQueue<Event> events_ = new java.util.concurrent.ArrayBlockingQueue<Event>(100);
     private final boolean down_[] = new boolean[CharKey.values().length];
@@ -381,7 +381,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     private int mousey = -1;
 
     ConsoleCanvas(int w, int h) throws java.io.IOException {
-        asciiData_ = new Window(w, h);
+        asciiData_ = new Buffer(w, h);
         bf_ = new BitmapFont();
 
         setPreferredSize(w * bf_.getWidth(), h * bf_.getHeight());
@@ -638,15 +638,15 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public void write(int x, int y, Window w) {
-        asciiData_.write(x, y, w);
+    public void write(int x, int y, Buffer b) {
+        asciiData_.write(x, y, b);
         repaint();
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void read(int x, int y, Window w) {
-        asciiData_.read(x, y, w);
+    public void read(int x, int y, Buffer b) {
+        asciiData_.read(x, y, b);
     }
     
     private static class KeyHelper implements Event.Handler

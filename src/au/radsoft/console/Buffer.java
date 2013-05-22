@@ -3,10 +3,10 @@
 
 package au.radsoft.console;
 
-public class Window {
+public class Buffer {
     private CharInfo[][] data_;
 
-    public Window(int w, int h) {
+    public Buffer(int w, int h) {
         if (w <= 0 || h <= 0)
             throw new IllegalArgumentException(
                     "Dimensions must be greater than zero.");
@@ -118,12 +118,12 @@ public class Window {
         }
     }
 
-    public void read(int x, int y, Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
+    public void read(int x, int y, Buffer b) {
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = 0; yy < b.height(); ++yy) {
                 final CharInfo srccell = get(xx + x, yy + y);
                 if (srccell != null) {
-                    final CharInfo dstcell = w.get(xx, yy);
+                    final CharInfo dstcell = b.get(xx, yy);
                     if (dstcell != null) {
                         dstcell.set(srccell);
                     }
@@ -132,12 +132,12 @@ public class Window {
         }
     }
 
-    public void write(int x, int y, Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
+    public void write(int x, int y, Buffer b) {
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = 0; yy < b.height(); ++yy) {
                 final CharInfo dstcell = get(xx + x, yy + y);
                 if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy);
+                    final CharInfo srccell = b.get(xx, yy);
                     if (srccell != null) {
                         dstcell.set(srccell);
                     }

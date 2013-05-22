@@ -34,9 +34,9 @@ public interface Console {
 
     void write(int x, int y, String s, Color fg, Color bg);
 
-    void write(int x, int y, Window w);
+    void write(int x, int y, Buffer b);
 
-    void read(int x, int y, Window w);
+    void read(int x, int y, Buffer b);
     
     CharKey getkey();
 

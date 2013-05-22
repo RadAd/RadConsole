@@ -22,7 +22,7 @@ import au.radsoft.console.CharInfo;
 import au.radsoft.console.CharKey;
 import au.radsoft.console.Color;
 import au.radsoft.console.Event;
-import au.radsoft.console.Window;
+import au.radsoft.console.Buffer;
 
 public class Win32Console implements au.radsoft.console.Console {
     private final CONSOLE_SCREEN_BUFFER_INFO savedcsbi = new CONSOLE_SCREEN_BUFFER_INFO();
@@ -661,35 +661,35 @@ public class Win32Console implements au.radsoft.console.Console {
 
     @Override
     // from au.radsoft.console.Console
-    public void write(int x, int y, Window w) {
-        CHAR_INFO[] chars = CHAR_INFO.createArray(w.width() * w.height());
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
-                final CharInfo cell = w.get(xx, yy);
-                int i = xx + yy * w.width();
+    public void write(int x, int y, Buffer b) {
+        CHAR_INFO[] chars = CHAR_INFO.createArray(b.width() * b.height());
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = 0; yy < b.height(); ++yy) {
+                final CharInfo cell = b.get(xx, yy);
+                int i = xx + yy * b.width();
                 // chars[i] = new CHAR_INFO(cell.c, convert(cell.fg, cell.bg));
                 chars[i].uChar.set((byte) cell.c);
                 chars[i].Attributes = convert(cell.fg, cell.bg);
             }
         }
         WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput, chars, new COORD(
-                (short) w.width(), (short) w.height()), new COORD((short) 0,
+                (short) b.width(), (short) b.height()), new COORD((short) 0,
                 (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + w.height()), (short) (x + w.width())));
+                new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
     }
     
     @Override
     // from au.radsoft.console.Console
-    public void read(int x, int y, Window w) {
-        CHAR_INFO[] chars = CHAR_INFO.createArray(w.width() * w.height());
+    public void read(int x, int y, Buffer b) {
+        CHAR_INFO[] chars = CHAR_INFO.createArray(b.width() * b.height());
         WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput, chars, new COORD(
-                (short) w.width(), (short) w.height()), new COORD((short) 0,
+                (short) b.width(), (short) b.height()), new COORD((short) 0,
                 (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + w.height()), (short) (x + w.width())));
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
-                final CharInfo cell = w.get(xx, yy);
-                int i = xx + yy * w.width();
+                new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
+        for (int xx = 0; xx < b.width(); ++xx) {
+            for (int yy = 0; yy < b.height(); ++yy) {
+                final CharInfo cell = b.get(xx, yy);
+                int i = xx + yy * b.width();
                 cell.c = (char) chars[i].uChar.AsciiChar;
                 cell.fg = convertfg(chars[i].Attributes);
                 cell.bg = convertbg(chars[i].Attributes);
