@@ -655,6 +655,12 @@ public class Win32Console implements au.radsoft.console.Console {
 
     @Override
     // from au.radsoft.console.Console
+    public void write(int x, int y, String s) {
+        write(x, y, s.toCharArray());
+    }
+
+    @Override
+    // from au.radsoft.console.Console
     public void write(int x, int y, String s, Color fg, Color bg) {
         write(x, y, s.toCharArray(), fg, bg);
     }

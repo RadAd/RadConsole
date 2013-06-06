@@ -29,6 +29,17 @@ public interface Event
             h.handle(this);
         }
         
+        @Override
+        public String toString()
+        {
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(key=" + key);
+            result.append(", state=" + state);
+            result.append(')');
+            return result.toString();
+        }
+        
         public final CharKey key;
         public final State state;
     }
@@ -48,6 +59,19 @@ public interface Event
             h.handle(this);
         }
         
+        @Override
+        public String toString()
+        {
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(key=" + key);
+            result.append(", state=" + state);
+            result.append(", mx=" + mx);
+            result.append(", my=" + my);
+            result.append(')');
+            return result.toString();
+        }
+        
         public final CharKey key;
         public final State state;
         public final int mx;
@@ -65,6 +89,17 @@ public interface Event
         public void handle(Handler h)
         {
             h.handle(this);
+        }
+        
+        @Override
+        public String toString()
+        {
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(mx=" + mx);
+            result.append(", my=" + my);
+            result.append(')');
+            return result.toString();
         }
         
         public final int mx;

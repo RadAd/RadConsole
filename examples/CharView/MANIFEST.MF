@@ -1,0 +1,11 @@
+Class-Path: jna.jar RadConsole.jar
+Name: Rad Console Char View
+Specification-Title: Rad Console Char View
+Specification-Version: 1.0
+Specification-Vendor: Radsoft
+Implementation-Title: Rad Console Char View
+Implementation-Version: 1.0
+Implementation-Vendor: Radsoft
+Package-Title: Rad Console Char View
+Package-Version: 1.0
+Package-Vendor: Radsoft
