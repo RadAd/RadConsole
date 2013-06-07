@@ -678,9 +678,9 @@ public class Win32Console implements au.radsoft.console.Console {
                 chars[i].Attributes = convert(cell.fg, cell.bg);
             }
         }
-        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput, chars, new COORD(
-                (short) b.width(), (short) b.height()), new COORD((short) 0,
-                (short) 0),
+        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput, chars,
+                new COORD((short) b.width(), (short) b.height()),
+                new COORD((short) 0, (short) 0),
                 new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
     }
     
@@ -688,9 +688,9 @@ public class Win32Console implements au.radsoft.console.Console {
     // from au.radsoft.console.Console
     public void read(int x, int y, Buffer b) {
         CHAR_INFO[] chars = CHAR_INFO.createArray(b.width() * b.height());
-        WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput, chars, new COORD(
-                (short) b.width(), (short) b.height()), new COORD((short) 0,
-                (short) 0),
+        WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput, chars,
+                new COORD((short) b.width(), (short) b.height()),
+                new COORD((short) 0, (short) 0),
                 new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
         for (int xx = 0; xx < b.width(); ++xx) {
             for (int yy = 0; yy < b.height(); ++yy) {
