@@ -16,13 +16,13 @@ class Snake
         Console console = ConsoleUtils.create("Snake", 30, 15, true);
         try
         {
-            console.showcursor(false);
+            console.showCursor(false);
         
             title(console);
         }
         finally
         {
-            console.cls();
+            console.clear();
             console.close();
         }
     }
@@ -30,16 +30,16 @@ class Snake
     static void title(Console console)
     {
         boolean exit = false;
-        console.cls();
+        console.clear();
         drawbox(console, Color.WHITE, Color.BLACK);
         
         while (!exit)
         {
-            console.fill(0, 0, console.width(), console.height(), Color.GRAY, Color.BLACK);
+            console.fill(0, 0, console.getWidth(), console.getHeight(), Color.GRAY, Color.BLACK);
             
-            console.write((console.width() - 5) / 2, console.height() / 2, "SNAKE", Color.WHITE, Color.BLACK);
+            console.write((console.getWidth() - 5) / 2, console.getHeight() / 2, "SNAKE", Color.WHITE, Color.BLACK);
             
-            CharKey key = console.getkey();
+            CharKey key = console.getKey();
             
             switch (key)
             {
@@ -62,8 +62,8 @@ class Snake
         
         int x1 = 0;
         int y1 = 0;
-        int x2 = console.width() - 1;
-        int y2 = console.height() - 1;
+        int x2 = console.getWidth() - 1;
+        int y2 = console.getHeight() - 1;
         
         for (int x = x1 + 1; x < x2; ++x)
         {
@@ -89,7 +89,7 @@ class Snake
     static void game(Console console)
     {
         boolean exit = false;
-        console.cls();
+        console.clear();
         
         drawbox(console, Color.WHITE, Color.BLACK);
         
@@ -104,8 +104,8 @@ class Snake
         int score = 0;
         drawScore(console, score);
         
-        Point2d p = new Point2d(r.nextInt(console.width() - 2) + 1, r.nextInt(console.height() - 2) + 1);
-        Direction d = p.x < (console.width()/2) ? Direction.East : Direction.West;
+        Point2d p = new Point2d(r.nextInt(console.getWidth() - 2) + 1, r.nextInt(console.getHeight() - 2) + 1);
+        Direction d = p.x < (console.getWidth()/2) ? Direction.East : Direction.West;
         java.util.Vector<Point2d> v = new java.util.Vector<Point2d>();
         console.write(p.x, p.y, head.c, head.fg, head.bg);
         v.add(p);
@@ -118,32 +118,32 @@ class Snake
         Point2d q;
         do
         {
-            q = new Point2d(r.nextInt(console.width() - 2) + 1, r.nextInt(console.height() - 2) + 1);
+            q = new Point2d(r.nextInt(console.getWidth() - 2) + 1, r.nextInt(console.getHeight() - 2) + 1);
         } while (p.equals(q) || v.contains(q));
         console.write(q.x, q.y, target.c, target.fg, target.bg);
         
         while (!exit)
         {
-            km.getkeys(console, 300 - (20 * v.size()));
+            km.getKeys(console, 300 - (20 * v.size()));
             
-            if (km.isset(CharKey.W) || km.isset(CharKey.UP))
+            if (km.isSet(CharKey.W) || km.isSet(CharKey.UP))
             {
                 d = Direction.North;
             }
-            else if (km.isset(CharKey.D) || km.isset(CharKey.RIGHT))
+            else if (km.isSet(CharKey.D) || km.isSet(CharKey.RIGHT))
             {
                 d = Direction.East;
             }
-            else if (km.isset(CharKey.S) || km.isset(CharKey.DOWN))
+            else if (km.isSet(CharKey.S) || km.isSet(CharKey.DOWN))
             {
                 d = Direction.South;
             }
-            else if (km.isset(CharKey.A) || km.isset(CharKey.LEFT))
+            else if (km.isSet(CharKey.A) || km.isSet(CharKey.LEFT))
             {
                 d = Direction.West;
             }
             
-            if (km.isset(CharKey.Q) || km.isset(CharKey.ESCAPE))
+            if (km.isSet(CharKey.Q) || km.isSet(CharKey.ESCAPE))
             {
                 exit = true;
             }
@@ -162,7 +162,7 @@ class Snake
                 
                 do
                 {
-                    q = new Point2d(r.nextInt(console.width() - 2) + 1, r.nextInt(console.height() - 2) + 1);
+                    q = new Point2d(r.nextInt(console.getWidth() - 2) + 1, r.nextInt(console.getHeight() - 2) + 1);
                 } while (p.equals(q) || v.contains(q));
                 console.write(q.x, q.y, target.c, target.fg, target.bg);
             }
@@ -180,7 +180,7 @@ class Snake
             if (v.contains(p))
                 exit = true;
             
-            if (p.x <= 0 || p.y <= 0 || p.x >= console.width() - 1 || p.y >= console.height() - 1)
+            if (p.x <= 0 || p.y <= 0 || p.x >= console.getWidth() - 1 || p.y >= console.getHeight() - 1)
                 exit = true;
         }
     }

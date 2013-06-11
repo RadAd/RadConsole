@@ -12,8 +12,7 @@ public class BitmapFont {
     private final java.util.AbstractMap<Color, Image> fontColorMap_ = new java.util.HashMap<Color, Image>();
 
     private final static Color defColor_ = Color.WHITE;
-    private final static java.net.URL fontUrl_ = BitmapFont.class
-            .getResource("/font8x12.png");
+    private final static java.net.URL fontUrl_ = BitmapFont.class.getResource("/font8x12.png");
     private final static int fontWidth_ = 16;
     private final static int fontHeight_ = 16;
 
@@ -31,8 +30,7 @@ public class BitmapFont {
         return font_.getHeight(null) / fontHeight_;
     }
 
-    public void paint(java.awt.Graphics g, char ch, Color fg, Color bg, int x,
-            int y) {
+    public void paint(java.awt.Graphics g, char ch, Color fg, Color bg, int x, int y) {
         final int tw = getWidth();
         final int th = getHeight();
 

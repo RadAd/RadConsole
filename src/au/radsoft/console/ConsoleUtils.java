@@ -8,7 +8,8 @@ import au.radsoft.console.win32.Win32Console;
 
 public class ConsoleUtils {
     public static Console create(String title, int w, int h, boolean usenative)
-            throws java.io.IOException {
+            throws java.io.IOException
+    {
         Console c = usenative ? Win32Console.create(title, w, h) : null;
         if (c == null)
             c = ConsoleCanvas.create(title, w, h);
@@ -20,13 +21,18 @@ public class ConsoleUtils {
         Win32Console.realloc();
     }
 
-    public static void scrollup(Buffer b) {
-        for (int xx = 0; xx < b.width(); ++xx) {
-            for (int yy = 0; yy < b.height(); ++yy) {
+    public static void scrollUp(Buffer b)
+    {
+        for (int xx = 0; xx < b.getWidth(); ++xx)
+        {
+            for (int yy = 0; yy < b.getHeight(); ++yy)
+            {
                 final CharInfo dstcell = b.get(xx, yy);
-                if (dstcell != null) {
+                if (dstcell != null)
+                {
                     final CharInfo srccell = b.get(xx, yy + 1);
-                    if (srccell != null) {
+                    if (srccell != null)
+                    {
                         dstcell.set(srccell);
                     }
                 }
@@ -34,13 +40,18 @@ public class ConsoleUtils {
         }
     }
 
-    public static void scrolldown(Buffer b) {
-        for (int xx = 0; xx < b.width(); ++xx) {
-            for (int yy = b.height(); yy > 0; --yy) {
+    public static void scrollDown(Buffer b)
+    {
+        for (int xx = 0; xx < b.getWidth(); ++xx)
+        {
+            for (int yy = b.getHeight(); yy > 0; --yy)
+            {
                 final CharInfo dstcell = b.get(xx, yy - 1);
-                if (dstcell != null) {
+                if (dstcell != null)
+                {
                     final CharInfo srccell = b.get(xx, yy - 2);
-                    if (srccell != null) {
+                    if (srccell != null)
+                    {
                         dstcell.set(srccell);
                     }
                 }

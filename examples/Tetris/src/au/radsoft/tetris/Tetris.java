@@ -22,22 +22,22 @@ class Tetris
         Console console = ConsoleUtils.create("Tetris", 15, 15, true);
         try
         {
-            console.showcursor(false);
+            console.showCursor(false);
         
             tetris(console);
             tetris(console);
         }
         finally
         {
-            console.cls();
+            console.clear();
             console.close();
         }
     }
     
     static boolean hit(Buffer b, int x, int y)
     {
-        return x < 0 || x >= b.width()
-            || y < 0 || y >= b.height()
+        return x < 0 || x >= b.getWidth()
+            || y < 0 || y >= b.getHeight()
             || b.get(x, y).c != ' ';
     }
     
@@ -69,13 +69,13 @@ class Tetris
     static void tetris(Console console)
     {
         boolean exit = false;
-        console.cls();
+        console.clear();
         
         java.util.Random r = new java.util.Random();
-        Buffer b = new Buffer(console.width() - 5, console.height());
-        Buffer db = new Buffer(console.width(), console.height());
+        Buffer b = new Buffer(console.getWidth() - 5, console.getHeight());
+        Buffer db = new Buffer(console.getWidth(), console.getHeight());
         
-        db.fill(b.width(), 0, db.width() - b.width(), b.height(), ' ', Color.WHITE, Color.LIGHT_GRAY);
+        db.fill(b.getWidth(), 0, db.getWidth() - b.getWidth(), b.getHeight(), ' ', Color.WHITE, Color.LIGHT_GRAY);
         
         Tetronome[] o = {
             new Tetronome(Color.GRAY, Color.LIGHT_GRAY, new Point2d[]{ new Point2d(-1, 0), new Point2d(0, 0), new Point2d(1, 0), new Point2d(2, 0) }, false),
@@ -91,7 +91,7 @@ class Tetris
         int or = 0;
         
         int speed = 1000;
-        Point2d p = new Point2d(b.width()/2, 1);
+        Point2d p = new Point2d(b.getWidth()/2, 1);
         long t = System.currentTimeMillis() + speed;
         
         while (!exit)
@@ -106,7 +106,7 @@ class Tetris
             
             boolean sit = hit(b, n, down);
         
-            CharKey key = console.getkeynowait();
+            CharKey key = console.getKeyNoWait();
             
             if (key != null)
             {
@@ -171,7 +171,7 @@ class Tetris
                 
                 if (sit)
                 {
-                    int miny = b.height() - 1;
+                    int miny = b.getHeight() - 1;
                     int maxy = 0;
                     
                     for (Point2d pb : n)
@@ -186,7 +186,7 @@ class Tetris
                     for (int y = miny; y <= maxy; ++y)
                     {
                         boolean full = true;
-                        for (int x = 0; x < b.width(); ++x)
+                        for (int x = 0; x < b.getWidth(); ++x)
                         {
                             if (!hit(b, x, y))
                                 full = false;
@@ -194,7 +194,7 @@ class Tetris
                         
                         if (full)
                         {
-                            b.fill(0, y, b.width(), 1, Color.WHITE, Color.BLACK);
+                            b.fill(0, y, b.getWidth(), 1, Color.WHITE, Color.BLACK);
                         }
                     }
                     
@@ -210,7 +210,7 @@ class Tetris
                     for (int y = miny; y <= maxy; ++y)
                     {
                         boolean full = true;
-                        for (int x = 0; x < b.width(); ++x)
+                        for (int x = 0; x < b.getWidth(); ++x)
                         {
                             if (!hit(b, x, y))
                                 full = false;
@@ -218,7 +218,7 @@ class Tetris
                         
                         if (full)
                         {
-                            for (int xx = 0; xx < b.width(); ++xx) {
+                            for (int xx = 0; xx < b.getWidth(); ++xx) {
                                 for (int yy = y; yy > 0; --yy) {
                                     final CharInfo dstcell = b.get(xx, yy);
                                     final CharInfo srccell = b.get(xx, yy - 1);
@@ -229,7 +229,7 @@ class Tetris
                     }
                     
                     oi = r.nextInt(o.length);
-                    p = new Point2d(b.width()/2, 1);
+                    p = new Point2d(b.getWidth()/2, 1);
                     
                     // TODO Test for hit -> game over
                 }

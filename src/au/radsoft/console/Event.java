@@ -14,6 +14,7 @@ public interface Event
         void handle(Key ke);
         void handle(MouseButton mbe);
         void handle(MouseMoved mme);
+        // TODO This isnt easily extendable
     }
     
     public static class Key implements Event

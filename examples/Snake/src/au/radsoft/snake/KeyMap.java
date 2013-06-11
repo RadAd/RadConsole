@@ -5,13 +5,13 @@ import au.radsoft.console.Console;
 
 public class KeyMap
 {
-    public void getkeys(Console console, long d)
+    public void getKeys(Console console, long d)
     {
         t += d;
         java.util.Arrays.fill(k, false);
         while (t > System.currentTimeMillis())
         {
-            CharKey key = console.getkeynowait();
+            CharKey key = console.getKeyNoWait();
             if (key != null)
                 k[key.ordinal()] = true;
                 else
@@ -27,7 +27,7 @@ public class KeyMap
         }
     }
     
-    public boolean isset(CharKey key)
+    public boolean isSet(CharKey key)
     {
         return k[key.ordinal()];
     }

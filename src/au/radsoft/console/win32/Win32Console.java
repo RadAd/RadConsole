@@ -25,14 +25,14 @@ import au.radsoft.console.Event;
 import au.radsoft.console.Buffer;
 
 public class Win32Console implements au.radsoft.console.Console {
-    private final CONSOLE_SCREEN_BUFFER_INFO savedcsbi = new CONSOLE_SCREEN_BUFFER_INFO();
-    private final Pointer hStdOutput;
-    private final Pointer hStdInput;
-    private int w;
-    private int h;
-    private int mousex = -1;
-    private int mousey = -1;
-    private int mousebutton = 0;
+    private final CONSOLE_SCREEN_BUFFER_INFO savedcsbi_ = new CONSOLE_SCREEN_BUFFER_INFO();
+    private final Pointer hStdOutput_;
+    private final Pointer hStdInput_;
+    private int width_;
+    private int height_;
+    private int mousex_ = -1;
+    private int mousey_ = -1;
+    private int mousebutton_ = 0;
     
     public static void realloc()
     {
@@ -48,48 +48,46 @@ public class Win32Console implements au.radsoft.console.Console {
     }
 
     public Win32Console(String title, int w, int h) {
-        this.w = w;
-        this.h = h;
+        width_ = w;
+        height_ = h;
 
         if (WinCon.INSTANCE.GetConsoleWindow() == null)
             WinCon.INSTANCE.AllocConsole();
-        // hStdOutput =
-        // WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE);
-        // hStdInput =
-        // WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE);
-        hStdOutput = FileAPI.INSTANCE.CreateFile("CONOUT$",
+        // hStdOutput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE);
+        // hStdInput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE);
+        hStdOutput_ = FileAPI.INSTANCE.CreateFile("CONOUT$",
                 FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
                 FileAPI.FILE_SHARE_WRITE, Pointer.NULL, FileAPI.OPEN_EXISTING,
                 0, Pointer.NULL);
-        hStdInput = FileAPI.INSTANCE.CreateFile("CONIN$",
+        hStdInput_ = FileAPI.INSTANCE.CreateFile("CONIN$",
                 FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
                 FileAPI.FILE_SHARE_READ, Pointer.NULL, FileAPI.OPEN_EXISTING,
                 0, Pointer.NULL);
-        //System.err.println("hStdOutput: " + hStdOutput);
-        //System.err.println("hStdInput: " + hStdInput);
+        //System.err.println("hStdOutput_: " + hStdOutput_);
+        //System.err.println("hStdInput_: " + hStdInput_);
         //System.err.println("STD_OUTPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE));
         //System.err.println("STD_INPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE));
 
-        WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput, savedcsbi);
+        WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput_, savedcsbi_);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
         WinCon.INSTANCE.SetConsoleTitle(title);
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) 1, (short) 1));
-        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, new COORD(
-                (short) w, (short) h));
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true,
+            new SMALL_RECT((short) 0, (short) 0, (short) 1, (short) 1));
+        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput_,
+            new COORD((short) w, (short) h));
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true,
+            new SMALL_RECT((short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
     }
 
     static short convert(Color fg, Color bg) {
         return (short) ((bg.ordinal() << 4) | fg.ordinal());
     }
 
-    static Color convertfg(short attr) {
+    static Color convertFg(short attr) {
         return Color.values()[attr & 0xF];
     }
     
-    static Color convertbg(short attr) {
+    static Color convertBg(short attr) {
         return Color.values()[(attr >> 4) & 0xF];
     }
     
@@ -511,69 +509,69 @@ public class Win32Console implements au.radsoft.console.Console {
     
     @Override
     // from au.radsoft.console.Console
-    public boolean isvalid() {
+    public boolean isValid() {
         return true;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void cls() {
+    public void clear() {
         COORD pos = new COORD((short) 0, (short) 0);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, ' ', w * h, pos, r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(Color.WHITE, Color.BLACK), w * h, pos, r);
-        WinCon.INSTANCE.SetConsoleCursorPosition(hStdOutput, pos);
+        WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput_, ' ', width_ * height_, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput_, convert(Color.WHITE, Color.BLACK), width_ * height_, pos, r);
+        WinCon.INSTANCE.SetConsoleCursorPosition(hStdOutput_, pos);
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int width() {
-        return w;
+    public int getWidth() {
+        return width_;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int height() {
-        return h;
+    public int getHeight() {
+        return height_;
     }
     
     @Override
     // from au.radsoft.console.Console
-    public void mouse(boolean enable) {
+    public void enableMouse(boolean enable) {
         IntByReference mode = new IntByReference();
-        WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
+        WinCon.INSTANCE.GetConsoleMode(hStdInput_, mode);
         if (enable)
-            WinCon.INSTANCE.SetConsoleMode(hStdInput, (mode.getValue() | WinCon.ENABLE_MOUSE_INPUT | WinCon.ENABLE_EXTENDED_FLAGS) & ~WinCon.ENABLE_QUICK_EDIT_MODE);
+            WinCon.INSTANCE.SetConsoleMode(hStdInput_, (mode.getValue() | WinCon.ENABLE_MOUSE_INPUT | WinCon.ENABLE_EXTENDED_FLAGS) & ~WinCon.ENABLE_QUICK_EDIT_MODE);
         else
-            WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() & ~WinCon.ENABLE_MOUSE_INPUT);
+            WinCon.INSTANCE.SetConsoleMode(hStdInput_, mode.getValue() & ~WinCon.ENABLE_MOUSE_INPUT);
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int mousex() {
-        return mousex;
+    public int getMouseX() {
+        return mousex_;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int mousey() {
-        return mousey;
+    public int getMouseY() {
+        return mousey_;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void showcursor(boolean show) {
+    public void showCursor(boolean show) {
         CONSOLE_CURSOR_INFO.ByReference cci = new CONSOLE_CURSOR_INFO.ByReference();
-        WinCon.INSTANCE.GetConsoleCursorInfo(hStdOutput, cci);
+        WinCon.INSTANCE.GetConsoleCursorInfo(hStdOutput_, cci);
         cci.bVisible = show;
-        WinCon.INSTANCE.SetConsoleCursorInfo(hStdOutput, cci);
+        WinCon.INSTANCE.SetConsoleCursorInfo(hStdOutput_, cci);
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void setcursor(int x, int y) {
+    public void setCursor(int x, int y) {
         COORD pos = new COORD((short) x, (short) y);
-        WinCon.INSTANCE.SetConsoleCursorPosition(hStdOutput, pos);
+        WinCon.INSTANCE.SetConsoleCursorPosition(hStdOutput_, pos);
     }
 
     @Override
@@ -582,8 +580,8 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos, r);
-            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput_, c, w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput_, convert(fg, bg), w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -595,7 +593,7 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput, c, w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputCharacter(hStdOutput_, c, w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -607,7 +605,7 @@ public class Win32Console implements au.radsoft.console.Console {
         IntByReference r = new IntByReference();
         COORD pos = new COORD((short) x, (short) y);
         while (h > 0) {
-            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), w, pos, r);
+            WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput_, convert(fg, bg), w, pos, r);
             ++pos.Y;
             --h;
         }
@@ -617,26 +615,26 @@ public class Win32Console implements au.radsoft.console.Console {
     public void write(int x, int y, char[] ch) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput_, ch, ch.length, pos, r);
     }
     public void write(int x, int y, byte[] ch) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput_, ch, ch.length, pos, r);
     }
 
     // @Override
     public void write(int x, int y, char[] ch, Color fg, Color bg) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput, ch, ch.length, pos, r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacter(hStdOutput_, ch, ch.length, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput_, convert(fg, bg), ch.length, pos, r);
     }
     public void write(int x, int y, byte[] ch, Color fg, Color bg) {
         COORD pos = new COORD((short) x, (short) y);
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput, ch, ch.length, pos, r);
-        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput, convert(fg, bg), ch.length, pos, r);
+        WinCon.INSTANCE.WriteConsoleOutputCharacterA(hStdOutput_, ch, ch.length, pos, r);
+        WinCon.INSTANCE.FillConsoleOutputAttribute(hStdOutput_, convert(fg, bg), ch.length, pos, r);
     }
 
     @Override
@@ -668,48 +666,48 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void write(int x, int y, Buffer b) {
-        CHAR_INFO[] chars = CHAR_INFO.createArray(b.width() * b.height());
-        for (int xx = 0; xx < b.width(); ++xx) {
-            for (int yy = 0; yy < b.height(); ++yy) {
+        CHAR_INFO[] chars = CHAR_INFO.createArray(b.getWidth() * b.getHeight());
+        for (int xx = 0; xx < b.getWidth(); ++xx) {
+            for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
-                int i = xx + yy * b.width();
+                int i = xx + yy * b.getWidth();
                 // chars[i] = new CHAR_INFO(cell.c, convert(cell.fg, cell.bg));
                 chars[i].uChar.set((byte) cell.c);
                 chars[i].Attributes = convert(cell.fg, cell.bg);
             }
         }
-        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput, chars,
-                new COORD((short) b.width(), (short) b.height()),
+        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
+                new COORD((short) b.getWidth(), (short) b.getHeight()),
                 new COORD((short) 0, (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
+                new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
     }
     
     @Override
     // from au.radsoft.console.Console
     public void read(int x, int y, Buffer b) {
-        CHAR_INFO[] chars = CHAR_INFO.createArray(b.width() * b.height());
-        WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput, chars,
-                new COORD((short) b.width(), (short) b.height()),
+        CHAR_INFO[] chars = CHAR_INFO.createArray(b.getWidth() * b.getHeight());
+        WinCon.INSTANCE.ReadConsoleOutputA(hStdOutput_, chars,
+                new COORD((short) b.getWidth(), (short) b.getHeight()),
                 new COORD((short) 0, (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + b.height()), (short) (x + b.width())));
-        for (int xx = 0; xx < b.width(); ++xx) {
-            for (int yy = 0; yy < b.height(); ++yy) {
+                new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
+        for (int xx = 0; xx < b.getWidth(); ++xx) {
+            for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
-                int i = xx + yy * b.width();
+                int i = xx + yy * b.getWidth();
                 cell.c = (char) chars[i].uChar.AsciiChar;
-                cell.fg = convertfg(chars[i].Attributes);
-                cell.bg = convertbg(chars[i].Attributes);
+                cell.fg = convertFg(chars[i].Attributes);
+                cell.bg = convertBg(chars[i].Attributes);
             }
         }
     }
 
     @Override
     // from au.radsoft.console.Console
-    public CharKey getkey() {
+    public CharKey getKey() {
         INPUT_RECORD[] ir = new INPUT_RECORD[1];
         IntByReference r = new IntByReference();
         while (true) {
-            WinCon.INSTANCE.ReadConsoleInput(hStdInput, ir, ir.length, r);
+            WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
                 case  INPUT_RECORD.KEY_EVENT:
@@ -717,22 +715,23 @@ public class Win32Console implements au.radsoft.console.Console {
                     if (ke.bKeyDown)
                         return convertKey(ke.wVirtualKeyCode);
                     break;
+                    
                 case INPUT_RECORD.MOUSE_EVENT:
                     MOUSE_EVENT_RECORD me = ir[i].Event.MouseEvent;
-                    mousex = me.dwMousePosition.X;
-                    mousey = me.dwMousePosition.Y;
+                    mousex_ = me.dwMousePosition.X;
+                    mousey_ = me.dwMousePosition.Y;
                     if (me.dwEventFlags == 0)
                     {
-                        int origmousebutton = mousebutton;
-                        mousebutton = me.dwButtonState;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
+                        int origmousebutton = mousebutton_;
+                        mousebutton_ = me.dwButtonState;
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTON1;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTONR;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTON2;
                     }
-                    else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
+                    else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
                         return CharKey.MOUSE_MOVED;
                     break;
                 }
@@ -742,12 +741,12 @@ public class Win32Console implements au.radsoft.console.Console {
 
     @Override
     // from au.radsoft.console.Console
-    public CharKey getkeynowait() {
+    public CharKey getKeyNoWait() {
         INPUT_RECORD[] ir = new INPUT_RECORD[1];
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput, r);
+        WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput_, r);
         while (r.getValue() > 0) {
-            WinCon.INSTANCE.ReadConsoleInput(hStdInput, ir, ir.length, r);
+            WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
                 case  INPUT_RECORD.KEY_EVENT:
@@ -755,66 +754,68 @@ public class Win32Console implements au.radsoft.console.Console {
                     if (ke.bKeyDown)
                         return convertKey(ke.wVirtualKeyCode);
                     break;
+                    
                 case INPUT_RECORD.MOUSE_EVENT:
                     MOUSE_EVENT_RECORD me = ir[i].Event.MouseEvent;
-                    mousex = me.dwMousePosition.X;
-                    mousey = me.dwMousePosition.Y;
+                    mousex_ = me.dwMousePosition.X;
+                    mousey_ = me.dwMousePosition.Y;
                     if (me.dwEventFlags == 0)
                     {
-                        int origmousebutton = mousebutton;
-                        mousebutton = me.dwButtonState;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
+                        int origmousebutton = mousebutton_;
+                        mousebutton_ = me.dwButtonState;
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTON1;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTONR;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
                             return CharKey.MOUSE_BUTTON2;
                     }
-                    else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
+                    else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
                         return CharKey.MOUSE_MOVED;
                     break;
                 }
             }
-            WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput, r);
+            WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput_, r);
         }
         return null;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public Event getevent() {
+    public Event getEvent() {
         INPUT_RECORD[] ir = new INPUT_RECORD[1];
         IntByReference r = new IntByReference();
         while (true) {
-            WinCon.INSTANCE.ReadConsoleInput(hStdInput, ir, ir.length, r);
+            WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
                 case  INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     return new Event.Key(convertKey(ke.wVirtualKeyCode), ke.bKeyDown ? Event.State.PRESSED : Event.State.RELEASED);
+                    
                 case INPUT_RECORD.MOUSE_EVENT:
                     MOUSE_EVENT_RECORD me = ir[i].Event.MouseEvent;
-                    mousex = me.dwMousePosition.X;
-                    mousey = me.dwMousePosition.Y;
+                    mousex_ = me.dwMousePosition.X;
+                    mousey_ = me.dwMousePosition.Y;
                     if (me.dwEventFlags == 0)
                     {
-                        int origmousebutton = mousebutton;
-                        mousebutton = me.dwButtonState;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex, mousey);
+                        int origmousebutton = mousebutton_;
+                        mousebutton_ = me.dwButtonState;
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex_, mousey_);
                     }
-                    else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
-                        return new Event.MouseMoved(mousex, mousey);
+                    else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
+                        return new Event.MouseMoved(mousex_, mousey_);
                     break;
                 }
             }
@@ -823,51 +824,52 @@ public class Win32Console implements au.radsoft.console.Console {
 
     @Override
     // from au.radsoft.console.Console
-    public Event geteventnowait() {
+    public Event getEventNoWait() {
         INPUT_RECORD[] ir = new INPUT_RECORD[1];
         IntByReference r = new IntByReference();
-        WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput, r);
+        WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput_, r);
         while (r.getValue() > 0) {
-            WinCon.INSTANCE.ReadConsoleInput(hStdInput, ir, ir.length, r);
+            WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
                 case  INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     return new Event.Key(convertKey(ke.wVirtualKeyCode), ke.bKeyDown ? Event.State.PRESSED : Event.State.RELEASED);
+                    
                 case INPUT_RECORD.MOUSE_EVENT:
                     MOUSE_EVENT_RECORD me = ir[i].Event.MouseEvent;
-                    mousex = me.dwMousePosition.X;
-                    mousey = me.dwMousePosition.Y;
+                    mousex_ = me.dwMousePosition.X;
+                    mousey_ = me.dwMousePosition.Y;
                     if (me.dwEventFlags == 0)
                     {
-                        int origmousebutton = mousebutton;
-                        mousebutton = me.dwButtonState;
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex, mousey);
-                        if ((mousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
-                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex, mousey);
+                        int origmousebutton = mousebutton_;
+                        mousebutton_ = me.dwButtonState;
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_1ST_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON1, Event.State.RELEASED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.RIGHTMOST_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTONR, Event.State.RELEASED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.PRESSED, mousex_, mousey_);
+                        if ((mousebutton_ & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) == 0 && (origmousebutton & MOUSE_EVENT_RECORD.FROM_LEFT_2ND_BUTTON_PRESSED) != 0)
+                            return new Event.MouseButton(CharKey.MOUSE_BUTTON2, Event.State.RELEASED, mousex_, mousey_);
                     }
-                    else if  ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
-                        return new Event.MouseMoved(mousex, mousey);
+                    else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
+                        return new Event.MouseMoved(mousex_, mousey_);
                     break;
                 }
             }
-            WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput, r);
+            WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput_, r);
         }
         return null;
     }
     
     @Override
     // from au.radsoft.console.Console
-    public boolean getkeydown(CharKey key) {
+    public boolean getKeyDown(CharKey key) {
         int code = convertKey(key);
         return (WinUser.INSTANCE.GetKeyState(code) & 0x80) == 0x80;
     }
@@ -875,10 +877,10 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void close() {
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT((short) 0, (short) 0, (short) 1, (short) 1));
-        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, savedcsbi.dwSize);
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, savedcsbi.srWindow);
-        showcursor(true);
-        cls();
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true, new SMALL_RECT((short) 0, (short) 0, (short) 1, (short) 1));
+        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput_, savedcsbi_.dwSize);
+        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true, savedcsbi_.srWindow);
+        showCursor(true);
+        clear();
     }
 }

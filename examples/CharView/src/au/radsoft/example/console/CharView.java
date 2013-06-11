@@ -10,7 +10,7 @@ import au.radsoft.console.ConsoleUtils;
 public class CharView {
     public static void main(String[] args) throws Exception {
         Console console = ConsoleUtils.create("Char View", 80, 25, true);
-        console.cls();
+        console.clear();
         
         for (int y = 0; y < 16; ++y)
         {
@@ -34,7 +34,7 @@ public class CharView {
         
         console.write(19, 1, b);
         
-        console.getkey();
+        console.getKey();
         console.close();
     }
 }

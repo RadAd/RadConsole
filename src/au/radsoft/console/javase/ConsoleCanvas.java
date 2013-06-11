@@ -317,38 +317,38 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     }
     
     class Cursor extends Thread {
-        private volatile boolean exit = false;
-        private volatile boolean show = true;
-        private boolean draw = true;
-        private volatile int x = 0;
-        private volatile int y = 0;
+        private volatile boolean exit_ = false;
+        private volatile boolean show_ = true;
+        private boolean draw_ = true;
+        private volatile int x_ = 0;
+        private volatile int y_ = 0;
 
         void set(int x, int y) {
-            this.x = x;
-            this.y = y;
+            x_ = x;
+            y_ = y;
         }
 
         void show(boolean show) {
-            this.show = show;
+            show_ = show;
             repaint();
         }
 
         public void run() {
-            while (!exit) {
+            while (!exit_) {
                 try {
                     sleep(250);
                 } catch (InterruptedException e) {
                 }
-                draw = !draw;
-                if (show && draw) {
+                draw_ = !draw_;
+                if (show_ && draw_) {
                     final int w = getWidth();
                     final int h = getHeight();
-                    final int tw = bf_.getWidth();
-                    final int th = bf_.getHeight();
-                    final int xo = Math.round((w - asciiData_.width() * tw) / 2);
-                    final int yo = Math.round((h - asciiData_.height() * th) / 2);
-                    int sx = xo + x * tw;
-                    int sy = yo + y * th;
+                    final int tw = font_.getWidth();
+                    final int th = font_.getHeight();
+                    final int xo = Math.round((w - asciiData_.getWidth() * tw) / 2);
+                    final int yo = Math.round((h - asciiData_.getHeight() * th) / 2);
+                    int sx = xo + x_ * tw;
+                    int sy = yo + y_ * th;
 
                     java.awt.Graphics g = getGraphics();
                     if (g != null) {
@@ -363,7 +363,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         }
 
         void stopWait() {
-            exit = true;
+            exit_ = true;
             try {
                 join();
             } catch (InterruptedException ex) {
@@ -372,19 +372,19 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     }
 
     private final Buffer asciiData_;
-    private final BitmapFont bf_;
+    private final BitmapFont font_;
     private final java.util.concurrent.BlockingQueue<Event> events_ = new java.util.concurrent.ArrayBlockingQueue<Event>(100);
     private final boolean down_[] = new boolean[CharKey.values().length];
-    private final Cursor cursor;
-    private boolean mouse = false;
-    private int mousex = -1;
-    private int mousey = -1;
+    private final Cursor cursor_;
+    private boolean mouse_ = false;
+    private int mousex_ = -1;
+    private int mousey_ = -1;
 
     ConsoleCanvas(int w, int h) throws java.io.IOException {
         asciiData_ = new Buffer(w, h);
-        bf_ = new BitmapFont();
+        font_ = new BitmapFont();
 
-        setPreferredSize(w * bf_.getWidth(), h * bf_.getHeight());
+        setPreferredSize(w * font_.getWidth(), h * font_.getHeight());
         enableEvents(java.awt.AWTEvent.KEY_EVENT_MASK
                 | java.awt.AWTEvent.MOUSE_EVENT_MASK
                 | java.awt.AWTEvent.MOUSE_MOTION_EVENT_MASK
@@ -393,8 +393,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         setFocusTraversalKeysEnabled(false);
         // setIgnoreRepaint(true);
 
-        cursor = new Cursor();
-        cursor.start();
+        cursor_ = new Cursor();
+        cursor_.start();
     }
 
     public void setPreferredSize(int w, int h) {
@@ -453,33 +453,33 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     @Override
     // from java.awt.Canvas
     protected void processMouseEvent(MouseEvent e) {
-        if (mouse) {
+        if (mouse_) {
             try {
                 // System.err.println("processMouseEvent: " + e);
                 final int w = getWidth();
                 final int h = getHeight();
                 
-                final int tw = bf_.getWidth();
-                final int th = bf_.getHeight();
+                final int tw = font_.getWidth();
+                final int th = font_.getHeight();
 
-                final int xo = Math.round((w - asciiData_.width() * tw) / 2);
-                final int yo = Math.round((h - asciiData_.height() * th) / 2);
+                final int xo = Math.round((w - asciiData_.getWidth() * tw) / 2);
+                final int yo = Math.round((h - asciiData_.getHeight() * th) / 2);
                 
-                mousex = (e.getX() - xo)/tw;
-                mousey = (e.getY() - yo)/th;
+                mousex_ = (e.getX() - xo)/tw;
+                mousey_ = (e.getY() - yo)/th;
                 
                 //if (e.getID() == MouseEvent.MOUSE_CLICKED)
                 if (e.getID() == MouseEvent.MOUSE_RELEASED)
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = false;
-                    events_.put(new Event.MouseButton(key, Event.State.RELEASED, mousex, mousey));
+                    events_.put(new Event.MouseButton(key, Event.State.RELEASED, mousex_, mousey_));
                 }
                 else if (e.getID() == MouseEvent.MOUSE_PRESSED)
                 {
                     CharKey key = convertButton(e.getButton());
                     down_[key.ordinal()] = true;
-                    events_.put(new Event.MouseButton(key, Event.State.PRESSED, mousex, mousey));
+                    events_.put(new Event.MouseButton(key, Event.State.PRESSED, mousex_, mousey_));
                 }
             } catch (InterruptedException ex) {
             }
@@ -489,23 +489,23 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     @Override
     // from java.awt.Canvas
     protected void processMouseMotionEvent(MouseEvent e) {
-        if (mouse) {
+        if (mouse_) {
             // System.err.println("processMouseMotionEvent: " + e);
-            // TODO dont update mouse position until event is processed in getkey
+            // TODO dont update mouse position until event is processed in getKey
             try {
                 final int w = getWidth();
                 final int h = getHeight();
                 
-                final int tw = bf_.getWidth();
-                final int th = bf_.getHeight();
+                final int tw = font_.getWidth();
+                final int th = font_.getHeight();
 
-                final int xo = Math.round((w - asciiData_.width() * tw) / 2);
-                final int yo = Math.round((h - asciiData_.height() * th) / 2);
+                final int xo = Math.round((w - asciiData_.getWidth() * tw) / 2);
+                final int yo = Math.round((h - asciiData_.getHeight() * th) / 2);
                 
-                mousex = (e.getX() - xo)/tw;
-                mousey = (e.getY() - yo)/th;
+                mousex_ = (e.getX() - xo)/tw;
+                mousey_ = (e.getY() - yo)/th;
             
-                events_.put(new Event.MouseMoved(mousex, mousey));
+                events_.put(new Event.MouseMoved(mousex_, mousey_));
             } catch (InterruptedException ex) {
             }
         }
@@ -518,21 +518,20 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
         g.clearRect(0, 0, w, h);
 
-        if (asciiData_ != null && bf_ != null) {
-            final int tw = bf_.getWidth();
-            final int th = bf_.getHeight();
+        if (asciiData_ != null && font_ != null) {
+            final int tw = font_.getWidth();
+            final int th = font_.getHeight();
 
-            final int xo = Math.round((w - asciiData_.width() * tw) / 2);
-            final int yo = Math.round((h - asciiData_.height() * th) / 2);
+            final int xo = Math.round((w - asciiData_.getWidth() * tw) / 2);
+            final int yo = Math.round((h - asciiData_.getHeight() * th) / 2);
 
-            for (int y = 0; y < asciiData_.height(); ++y) {
-                for (int x = 0; x < asciiData_.width(); ++x) {
+            for (int y = 0; y < asciiData_.getHeight(); ++y) {
+                for (int x = 0; x < asciiData_.getWidth(); ++x) {
                     final CharInfo cc = asciiData_.get(x, y);
                     if (cc != null) {
                         int sx = xo + x * tw;
                         int sy = yo + y * th;
-                        bf_.paint(g, cc.c, convert(cc.fg), convert(cc.bg), sx,
-                                sy);
+                        font_.paint(g, cc.c, convert(cc.fg), convert(cc.bg), sx, sy);
                     }
                 }
             }
@@ -541,57 +540,57 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public boolean isvalid() {
+    public boolean isValid() {
         return isShowing();
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int width() {
-        return asciiData_.width();
+    public int getWidth() {
+        return asciiData_.getWidth();
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int height() {
-        return asciiData_.height();
+    public int getHeight() {
+        return asciiData_.getHeight();
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void mouse(boolean enable) {
-        mouse = enable;
+    public void enableMouse(boolean enable) {
+        mouse_ = enable;
     }
     
     @Override
     // from au.radsoft.console.Console
-    public int mousex() {
-        return mousex;
+    public int getMouseX() {
+        return mousex_;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public int mousey() {
-        return mousey;
+    public int getMouseY() {
+        return mousey_;
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void cls() {
-        asciiData_.cls();
+    public void clear() {
+        asciiData_.clear();
         repaint();
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void showcursor(boolean show) {
-        cursor.show(show);
+    public void showCursor(boolean show) {
+        cursor_.show(show);
     }
 
     @Override
     // from au.radsoft.console.Console
-    public void setcursor(int x, int y) {
-        cursor.set(x, y);
+    public void setCursor(int x, int y) {
+        cursor_.set(x, y);
     }
 
     @Override
@@ -678,7 +677,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         CharKey key = null;
     }
         
-    public CharKey getkeyhelper(Event e) {
+    public CharKey getKeyHelper(Event e) {
         KeyHelper kh = new KeyHelper();
         e.handle(kh);
         return kh.key;
@@ -686,14 +685,14 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public CharKey getkey() {
+    public CharKey getKey() {
         try {
             CharKey ck = null;
-            while (ck == null && isvalid())
+            while (ck == null && isValid())
             {
                 Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
                 if (e != null)
-                    ck = getkeyhelper(e);
+                    ck = getKeyHelper(e);
             }
             return ck == null ? CharKey.NONE : ck;
         } catch (InterruptedException e) {
@@ -703,15 +702,15 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public CharKey getkeynowait() {
+    public CharKey getKeyNoWait() {
         try {
             synchronized(events_) {
                 CharKey ck = null;
-                while (!events_.isEmpty() && ck == null && isvalid())
+                while (!events_.isEmpty() && ck == null && isValid())
                 {
                     Event e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
                     if (e != null)
-                        ck = getkeyhelper(e);
+                        ck = getKeyHelper(e);
                 }
                 return ck;
             }
@@ -722,10 +721,10 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public Event getevent() {
+    public Event getEvent() {
         try {
             Event e = null;
-            while (e == null && isvalid())
+            while (e == null && isValid())
             {
                 e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
             }
@@ -737,12 +736,12 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public Event geteventnowait() {
+    public Event getEventNoWait() {
         try {
             synchronized(events_) {
                 Event e = null;
                 if (!events_.isEmpty()) {
-                    while (e == null && isvalid())
+                    while (e == null && isValid())
                     {
                         e = events_.poll(1, java.util.concurrent.TimeUnit.SECONDS);
                     }
@@ -756,14 +755,14 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
-    public boolean getkeydown(CharKey key) {
+    public boolean getKeyDown(CharKey key) {
         return down_[key.ordinal()];
     }
     
     @Override
     // from au.radsoft.console.Console
     public void close() {
-        cursor.stopWait();
+        cursor_.stopWait();
         java.awt.Window w = (java.awt.Window) getParent();
         w.dispose();
     }
