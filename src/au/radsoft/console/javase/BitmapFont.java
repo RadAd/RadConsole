@@ -45,8 +45,7 @@ public class BitmapFont {
             final int by = ch / fontWidth_ * th;
 
             Image font = getColorImage(fg);
-            g.drawImage(font, x, y, x + tw, y + th, bx, by, bx + tw, by + th,
-                    bg, null);
+            g.drawImage(font, x, y, x + tw, y + th, bx, by, bx + tw, by + th, bg, null);
         }
     }
 
@@ -60,13 +59,11 @@ public class BitmapFont {
     }
 
     private static Image createColorImage(Image src, Color a, Color b) {
-        BufferedImage dst = new BufferedImage(src.getWidth(null),
-                src.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+        BufferedImage dst = new BufferedImage(src.getWidth(null), src.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 
         BufferedImage bisrc = (BufferedImage) src;
         int[] pixels = new int[src.getWidth(null) * src.getHeight(null)];
-        bisrc.getRGB(0, 0, src.getWidth(null), src.getHeight(null), pixels, 0,
-                src.getWidth(null));
+        bisrc.getRGB(0, 0, src.getWidth(null), src.getHeight(null), pixels, 0, src.getWidth(null));
 
         for (int i = 0; i < pixels.length; i++) {
             if ((pixels[i] & 0xFFFFFF) == (a.getRGB() & 0xFFFFFF)) {
@@ -74,8 +71,7 @@ public class BitmapFont {
             }
         }
 
-        dst.setRGB(0, 0, dst.getWidth(null), dst.getHeight(null), pixels, 0,
-                dst.getWidth(null));
+        dst.setRGB(0, 0, dst.getWidth(null), dst.getHeight(null), pixels, 0, dst.getWidth(null));
         return dst;
     }
 }

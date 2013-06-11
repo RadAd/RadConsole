@@ -89,16 +89,19 @@ public class Test {
                 case ESCAPE:
                     exit = true;
                     break;
+                    
                 case LEFT:
                 case A:
                     if (shipx > 0)
                         shipx--;
                     break;
+                    
                 case RIGHT:
                 case D:
                     if (shipx < console.getWidth() - 1)
                         shipx++;
                     break;
+                    
                 default:
                     break;
                 }
@@ -134,35 +137,43 @@ public class Test {
             case ESCAPE:
                 exit = true;
                 break;
+                
             case LEFT:
             case A:
                 if (x > 0)
                     x--;
                 break;
+                
             case UP:
             case W:
                 if (y > 0)
                     y--;
                 break;
+                
             case RIGHT:
             case D:
                 if (x < console.getWidth() - 1)
                     x++;
                 break;
+                
             case DOWN:
             case S:
                 if (y < console.getHeight() - 1)
                     y++;
                 break;
+                
             case MOUSE_BUTTON1:
                 console.write(console.getMouseX(), console.getMouseY(), '*', Color.WHITE, Color.BLACK);
                 break;
+                
             case MOUSE_BUTTONR:
                 console.write(console.getMouseX(), console.getMouseY(), '=', Color.WHITE, Color.BLACK);
                 break;
+                
             case MOUSE_BUTTON2:
                 console.write(console.getMouseX(), console.getMouseY(), '%', Color.WHITE, Color.BLACK);
                 break;
+                
             default:
                 break;
             }

@@ -31,7 +31,7 @@ class Snake
     {
         boolean exit = false;
         console.clear();
-        drawbox(console, Color.WHITE, Color.BLACK);
+        drawBox(console, Color.WHITE, Color.BLACK);
         
         while (!exit)
         {
@@ -56,7 +56,7 @@ class Snake
         }
     }
     
-    static void drawbox(Console console, Color fg, Color bg)
+    static void drawBox(Console console, Color fg, Color bg)
     {
         char[] c = { 205, 186, 201, 187, 200, 188 };
         
@@ -91,7 +91,7 @@ class Snake
         boolean exit = false;
         console.clear();
         
-        drawbox(console, Color.WHITE, Color.BLACK);
+        drawBox(console, Color.WHITE, Color.BLACK);
         
         java.util.Random r = new java.util.Random();
         

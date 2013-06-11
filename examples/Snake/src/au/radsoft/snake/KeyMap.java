@@ -7,13 +7,13 @@ public class KeyMap
 {
     public void getKeys(Console console, long d)
     {
-        t += d;
-        java.util.Arrays.fill(k, false);
-        while (t > System.currentTimeMillis())
+        time_ += d;
+        java.util.Arrays.fill(keys_, false);
+        while (time_ > System.currentTimeMillis())
         {
             CharKey key = console.getKeyNoWait();
             if (key != null)
-                k[key.ordinal()] = true;
+                keys_[key.ordinal()] = true;
                 else
             {
                 try
@@ -29,9 +29,9 @@ public class KeyMap
     
     public boolean isSet(CharKey key)
     {
-        return k[key.ordinal()];
+        return keys_[key.ordinal()];
     }
     
-    private long t = System.currentTimeMillis();
-    private boolean[] k = new boolean[CharKey.values().length];
+    private long time_ = System.currentTimeMillis();
+    private boolean[] keys_ = new boolean[CharKey.values().length];
 }

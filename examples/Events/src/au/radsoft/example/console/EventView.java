@@ -10,15 +10,15 @@ import au.radsoft.console.Event;
 public class EventView {
     public static void main(String[] args) throws Exception {
         Console console = ConsoleUtils.create("Char View", 80, 25, true);
-        console.cls();
-        console.mouse(true);
+        console.clear();
+        console.enableMouse(true);
         
         boolean exit = false;
         while (!exit)
         {
-            Event ev = console.getevent();
-            console.cls();
-            console.write(1, 1, ev.toString());
+            Event event = console.getEvent();
+            console.clear();
+            console.write(1, 1, event.toString());
         }
         
         console.close();
