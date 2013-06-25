@@ -13,9 +13,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 @SuppressWarnings("serial")
-public class ConsoleCanvas extends java.awt.Canvas implements
-        au.radsoft.console.Console {
-
+public class ConsoleCanvas extends java.awt.Canvas implements au.radsoft.console.Console
+{
     public static ConsoleCanvas create(String title, int w, int h)
             throws java.io.IOException {
         java.awt.Frame f = null;
@@ -341,8 +340,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
                 }
                 draw_ = !draw_;
                 if (show_ && draw_) {
-                    final int w = getWidth();
-                    final int h = getHeight();
+                    final int w = ConsoleCanvas.super.getWidth();
+                    final int h = ConsoleCanvas.super.getHeight();
                     final int tw = font_.getWidth();
                     final int th = font_.getHeight();
                     final int xo = Math.round((w - asciiData_.getWidth() * tw) / 2);
@@ -456,8 +455,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
         if (mouse_) {
             try {
                 // System.err.println("processMouseEvent: " + e);
-                final int w = getWidth();
-                final int h = getHeight();
+                final int w = super.getWidth();
+                final int h = super.getHeight();
                 
                 final int tw = font_.getWidth();
                 final int th = font_.getHeight();
@@ -493,8 +492,8 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             // System.err.println("processMouseMotionEvent: " + e);
             // TODO dont update mouse position until event is processed in getKey
             try {
-                final int w = getWidth();
-                final int h = getHeight();
+                final int w = super.getWidth();
+                final int h = super.getHeight();
                 
                 final int tw = font_.getWidth();
                 final int th = font_.getHeight();
@@ -513,9 +512,9 @@ public class ConsoleCanvas extends java.awt.Canvas implements
     
     public void render(java.awt.Graphics g) {
         // System.err.prinltn("Render: " + System.currentTimeMillis());
-        final int w = getWidth();
-        final int h = getHeight();
-
+        final int w = super.getWidth();
+        final int h = super.getHeight();
+        
         g.clearRect(0, 0, w, h);
 
         if (asciiData_ != null && font_ != null) {
@@ -537,7 +536,7 @@ public class ConsoleCanvas extends java.awt.Canvas implements
             }
         }
     }
-
+    
     @Override
     // from au.radsoft.console.Console
     public boolean isValid() {
@@ -546,12 +545,14 @@ public class ConsoleCanvas extends java.awt.Canvas implements
 
     @Override
     // from au.radsoft.console.Console
+    // TODO java.awt.Canvas also has this function, dont want to override it
     public int getWidth() {
         return asciiData_.getWidth();
     }
 
     @Override
     // from au.radsoft.console.Console
+    // TODO java.awt.Canvas also has this function, dont want to override it
     public int getHeight() {
         return asciiData_.getHeight();
     }
