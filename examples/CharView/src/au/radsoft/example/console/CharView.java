@@ -9,6 +9,7 @@ import au.radsoft.console.ConsoleUtils;
 
 public class CharView {
     public static void main(String[] args) throws Exception {
+        ConsoleUtils.realloc();
         Console console = ConsoleUtils.create("Char View", 80, 25, true);
         console.clear();
         
@@ -34,7 +35,8 @@ public class CharView {
         
         console.write(19, 1, b);
         
-        console.getKey();
+        while (console.getKey() == null)
+            ;
         console.close();
     }
 }

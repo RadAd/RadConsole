@@ -1,0 +1,8 @@
+<project name="RadConsole" basedir="." default="build">
+
+    <property name="project.displayname"  value="Rad Console"/>
+    <property name="project.version"      value="1.0"/>
+    
+    <import file="radjava.xml"/>
+    
+</project>
