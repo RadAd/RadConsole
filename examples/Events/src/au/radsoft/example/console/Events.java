@@ -11,12 +11,12 @@ import au.radsoft.console.ConsoleUtils;
 public class Events {
     public static void main(String[] args) throws Exception {
         Console console = ConsoleUtils.create("Events", 80, 25, true);
-        console.cls();
+        console.clear();
         
         boolean exit = false;
         while (!exit)
         {
-            Event ev = console.getevent();
+            Event ev = console.getEvent();
             console.write(1, 1, ev.toString() + "     ");
             if (ev instanceof Event.Key)
             {
