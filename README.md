@@ -9,7 +9,6 @@ Create an instance:
 
     Console console = ConsoleUtils.create("Test", 80, 25, true);
 
-[Download](bin/RadConsole.jar?raw=true) binary package.
+[Download](archive/30102013.zip) binary package.
 
-Download [jna](libs/jna.jar?raw=true) dependency. See [Java Native Access](https://github.com/twall/jna).
-
+Dependency: [Java Native Access](https://github.com/twall/jna).
