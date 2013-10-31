@@ -1,7 +1,6 @@
 @echo off
-call make.bat
-call examples\Example1\make.bat
-call examples\Snake\make.bat
-call examples\Tetris\make.bat
-call examples\CharView\make.bat
-call examples\Events\make.bat
+call make.bat %*
+for /d %%i in (examples/*) do (
+	call "examples\%%i\makedep.bat"
+	call "examples\%%i\make.bat" %*
+)
