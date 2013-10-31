@@ -3,44 +3,43 @@
 
 package au.radsoft.console;
 
-public class Window {
-    private CharInfo[][] data_;
+public class Buffer {
+    private final CharInfo[][] data_;
 
-    public Window(int w, int h) {
+    public Buffer(int w, int h) {
         if (w <= 0 || h <= 0)
-            throw new IllegalArgumentException(
-                    "Dimensions must be greater than zero.");
+            throw new IllegalArgumentException("Dimensions must be greater than zero.");
 
         data_ = new CharInfo[h][w];
 
-        for (int y = 0; y < height(); ++y) {
-            for (int x = 0; x < width(); ++x) {
+        for (int y = 0; y < getHeight(); ++y) {
+            for (int x = 0; x < getWidth(); ++x) {
                 data_[y][x] = new CharInfo(' ', Color.WHITE, Color.BLACK);
             }
         }
     }
 
-    public int width() {
+    public int getWidth() {
         return data_[0].length;
     }
 
-    public int height() {
+    public int getHeight() {
         return data_.length;
     }
 
     public CharInfo get(int x, int y) {
-        if (isvalid(x, y))
+        if (isValid(x, y))
             return data_[y][x];
         else
             return null;
     }
 
-    private boolean isvalid(int x, int y) {
-        return y >= 0 && y < height() && x >= 0 && x < width();
+    private boolean isValid(int x, int y) {
+        return y >= 0 && y < getHeight() && x >= 0 && x < getWidth();
     }
 
-    public void cls() {
-        fill(0, 0, width(), height(), ' ', Color.WHITE, Color.BLACK);
+    public void clear() {
+        fill(0, 0, getWidth(), getHeight(), ' ', Color.WHITE, Color.BLACK);
     }
 
     public void fill(int x, int y, int w, int h, char c, Color fg, Color bg) {
@@ -118,12 +117,12 @@ public class Window {
         }
     }
 
-    public void read(int x, int y, Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
+    public void read(int x, int y, Buffer b) {
+        for (int xx = 0; xx < b.getWidth(); ++xx) {
+            for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo srccell = get(xx + x, yy + y);
                 if (srccell != null) {
-                    final CharInfo dstcell = w.get(xx, yy);
+                    final CharInfo dstcell = b.get(xx, yy);
                     if (dstcell != null) {
                         dstcell.set(srccell);
                     }
@@ -132,12 +131,12 @@ public class Window {
         }
     }
 
-    public void write(int x, int y, Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
+    public void write(int x, int y, Buffer b) {
+        for (int xx = 0; xx < b.getWidth(); ++xx) {
+            for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo dstcell = get(xx + x, yy + y);
                 if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy);
+                    final CharInfo srccell = b.get(xx, yy);
                     if (srccell != null) {
                         dstcell.set(srccell);
                     }

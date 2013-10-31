@@ -36,6 +36,9 @@ public interface WinCon extends StdCallLibrary {
     // BOOL WINAPI AllocConsole(void);
     void AllocConsole() throws LastErrorException;
 
+    // BOOL WINAPI FreeConsole(void);
+    void FreeConsole() throws LastErrorException;
+
     // HWND WINAPI GetConsoleWindow(void);
     Pointer GetConsoleWindow();
 
@@ -99,12 +102,41 @@ public interface WinCon extends StdCallLibrary {
             INPUT_RECORD[] out_lpBuffer, int in_nLength,
             IntByReference out_lpNumberOfEventsRead) throws LastErrorException;
 
+<<<<<<< HEAD
     // BOOL WINAPI SetConsoleCtrlHandler(
     // _In_opt_  PHANDLER_ROUTINE HandlerRoutine,
     // _In_      BOOL Add);
     void SetConsoleCtrlHandler(
         Pointer in_opt_HandlerRoutine,
         boolean in_Add)
+=======
+    // BOOL WINAPI ReadConsoleOutput(
+    // _In_     HANDLE hConsoleOutput,
+    // _Out_    PCHAR_INFO lpBuffer,
+    // _In_     COORD dwBufferSize,
+    // _In_     COORD dwBufferCoord,
+    // _Inout_  PSMALL_RECT lpReadRegion);
+    public void ReadConsoleOutput(Pointer in_hConsoleOutput, CHAR_INFO[] out_lpBuffer,
+            COORD in_dwBufferSize, COORD in_dwBufferCoord,
+            SMALL_RECT inout_lpReadRegion) throws LastErrorException;
+    public void ReadConsoleOutputA(Pointer in_hConsoleOutput, CHAR_INFO[] out_lpBuffer,
+            COORD in_dwBufferSize, COORD in_dwBufferCoord,
+            SMALL_RECT inout_lpReadRegion) throws LastErrorException;
+            
+    // BOOL WINAPI ReadConsoleOutputCharacter(
+    // _In_   HANDLE hConsoleOutput,
+    // _Out_  LPTSTR lpCharacter,
+    // _In_   DWORD nLength,
+    // _In_   COORD dwReadCoord,
+    // _Out_  LPDWORD lpNumberOfCharsRead);
+    public void ReadConsoleOutputCharacter(Pointer in_hConsoleOutput,
+            char[] ouy_lpCharacter, int in_nLength, COORD in_dwReadCoord,
+            IntByReference out_lpNumberOfCharsRead)
+            throws LastErrorException;
+    public void ReadConsoleOutputCharacterA(Pointer in_hConsoleOutput,
+            byte[] ouy_lpCharacter, int in_nLength, COORD in_dwReadCoord,
+            IntByReference out_lpNumberOfCharsRead)
+>>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
             throws LastErrorException;
 
     // BOOL WINAPI SetConsoleCursorInfo(

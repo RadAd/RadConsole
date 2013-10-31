@@ -6,14 +6,16 @@ import au.radsoft.geom.Point2d;
 
 public class Tetronome
 {
-    public Tetronome(Color c, Point2d[] o, boolean rotate)
+    public Tetronome(Color c, Color c2, Point2d[] o, boolean rotate)
     {
         this.c = c;
+        this.c2 = c2;
         this.o = o;
         this.rotate = rotate;
     }
     
     public final Color c;
+    public final Color c2;
     private final Point2d[] o;
     private final boolean rotate;
     

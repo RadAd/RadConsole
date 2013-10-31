@@ -4,23 +4,23 @@
 package au.radsoft.console;
 
 public interface Console {
-    boolean isvalid();
+    boolean isValid();
 
-    int width();
+    int getWidth();
 
-    int height();
+    int getHeight();
     
-    void mouse(boolean enable);
+    void enableMouse(boolean enable);
     
-    int mousex();
+    int getMouseX();
 
-    int mousey();
+    int getMouseY();
 
-    void cls();
+    void clear();
 
-    void showcursor(boolean show);
+    void showCursor(boolean show);
 
-    void setcursor(int x, int y);
+    void setCursor(int x, int y);
 
     void fill(int x, int y, int w, int h, char c, Color fg, Color bg);
 
@@ -33,20 +33,27 @@ public interface Console {
     void write(int x, int y, char ch, Color fg, Color bg);
 
     void write(int x, int y, String s);
+<<<<<<< HEAD
     
     void write(int x, int y, String s, Color fg, Color bg);
+=======
+>>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
 
-    void write(int x, int y, Window w);
+    void write(int x, int y, String s, Color fg, Color bg);
+    
+    void write(int x, int y, Buffer b);
 
-    CharKey getkey();
+    void read(int x, int y, Buffer b);
+    
+    CharKey getKey();
 
-    CharKey getkeynowait();
+    CharKey getKeyNoWait();
 
-    Event getevent();
+    Event getEvent();
 
-    Event geteventnowait();
+    Event getEventNoWait();
 
-    boolean getkeydown(CharKey key);
+    boolean getKeyDown(CharKey key);
     
     void close();
 }

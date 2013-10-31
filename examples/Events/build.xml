@@ -1,0 +1,9 @@
+<project name="EventView" basedir="." default="build">
+
+    <property name="project.displayname"  value="Rad Console Event View"/>
+    <property name="project.mainclass"    value="au.radsoft.example.console.EventView"/>
+    <property name="project.version"      value="1.0"/>
+    
+    <import file="../../radjava/radjava.xml"/>
+    
+</project>

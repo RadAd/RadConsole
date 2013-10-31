@@ -14,6 +14,7 @@ public interface Event
         void handle(Key ke);
         void handle(MouseButton mbe);
         void handle(MouseMoved mme);
+        // TODO This isnt easily extendable
     }
     
     public static class Key implements Event
@@ -33,7 +34,16 @@ public interface Event
         @Override
         public String toString()
         {
+<<<<<<< HEAD
             return super.toString() + "(" + key + ", " + state + ")";
+=======
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(key=" + key);
+            result.append(", state=" + state);
+            result.append(')');
+            return result.toString();
+>>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
         }
         
         public final CharKey key;
@@ -59,7 +69,18 @@ public interface Event
         @Override
         public String toString()
         {
+<<<<<<< HEAD
             return super.toString() + "(" + key + ", " + state + ", " + mx + ", " + my + ")";
+=======
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(key=" + key);
+            result.append(", state=" + state);
+            result.append(", mx=" + mx);
+            result.append(", my=" + my);
+            result.append(')');
+            return result.toString();
+>>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
         }
         
         public final CharKey key;
@@ -85,7 +106,16 @@ public interface Event
         @Override
         public String toString()
         {
+<<<<<<< HEAD
             return super.toString() + "(" + mx + ", " + my + ")";
+=======
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(mx=" + mx);
+            result.append(", my=" + my);
+            result.append(')');
+            return result.toString();
+>>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
         }
         
         public final int mx;

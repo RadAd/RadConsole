@@ -8,20 +8,31 @@ import au.radsoft.console.win32.Win32Console;
 
 public class ConsoleUtils {
     public static Console create(String title, int w, int h, boolean usenative)
-            throws java.io.IOException {
+            throws java.io.IOException
+    {
         Console c = usenative ? Win32Console.create(title, w, h) : null;
         if (c == null)
             c = ConsoleCanvas.create(title, w, h);
         return c;
     }
+    
+    public static void realloc()
+    {
+        Win32Console.realloc();
+    }
 
-    public static void scrollup(Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = 0; yy < w.height(); ++yy) {
-                final CharInfo dstcell = w.get(xx, yy);
-                if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy + 1);
-                    if (srccell != null) {
+    public static void scrollUp(Buffer b)
+    {
+        for (int xx = 0; xx < b.getWidth(); ++xx)
+        {
+            for (int yy = 0; yy < b.getHeight(); ++yy)
+            {
+                final CharInfo dstcell = b.get(xx, yy);
+                if (dstcell != null)
+                {
+                    final CharInfo srccell = b.get(xx, yy + 1);
+                    if (srccell != null)
+                    {
                         dstcell.set(srccell);
                     }
                 }
@@ -29,13 +40,18 @@ public class ConsoleUtils {
         }
     }
 
-    public static void scrolldown(Window w) {
-        for (int xx = 0; xx < w.width(); ++xx) {
-            for (int yy = w.height(); yy > 0; --yy) {
-                final CharInfo dstcell = w.get(xx, yy - 1);
-                if (dstcell != null) {
-                    final CharInfo srccell = w.get(xx, yy - 2);
-                    if (srccell != null) {
+    public static void scrollDown(Buffer b)
+    {
+        for (int xx = 0; xx < b.getWidth(); ++xx)
+        {
+            for (int yy = b.getHeight(); yy > 0; --yy)
+            {
+                final CharInfo dstcell = b.get(xx, yy - 1);
+                if (dstcell != null)
+                {
+                    final CharInfo srccell = b.get(xx, yy - 2);
+                    if (srccell != null)
+                    {
                         dstcell.set(srccell);
                     }
                 }

@@ -1,0 +1,9 @@
+<project name="CharView" basedir="." default="build">
+
+    <property name="project.displayname"  value="Rad Console Char View"/>
+    <property name="project.mainclass"    value="au.radsoft.example.console.CharView"/>
+    <property name="project.version"      value="1.0"/>
+    
+    <import file="../../radjava/radjava.xml"/>
+    
+</project>
