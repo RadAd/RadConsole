@@ -9,6 +9,4 @@ Create an instance:
 
     Console console = ConsoleUtils.create("Test", 80, 25, true);
 
-[Download](archive/30102013.zip) binary package.
-
 Dependency: [Java Native Access](https://github.com/twall/jna).
