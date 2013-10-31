@@ -70,29 +70,19 @@ public class Win32Console implements au.radsoft.console.Console {
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput_, savedcsbi_);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
-<<<<<<< HEAD
         if (title != null)
             WinCon.INSTANCE.SetConsoleTitle(title);
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) 1, (short) 1));
-        WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput, new COORD(
-                (short) w, (short) h));
-        WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput, true, new SMALL_RECT(
-                (short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
-
-        // Disable Ctrl+C
-        IntByReference mode = new IntByReference();
-        WinCon.INSTANCE.GetConsoleMode(hStdInput, mode);
-        WinCon.INSTANCE.SetConsoleMode(hStdInput, mode.getValue() & ~WinCon.ENABLE_PROCESSED_INPUT);
-=======
-        WinCon.INSTANCE.SetConsoleTitle(title);
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true,
             new SMALL_RECT((short) 0, (short) 0, (short) 1, (short) 1));
         WinCon.INSTANCE.SetConsoleScreenBufferSize(hStdOutput_,
             new COORD((short) w, (short) h));
         WinCon.INSTANCE.SetConsoleWindowInfo(hStdOutput_, true,
             new SMALL_RECT((short) 0, (short) 0, (short) (h - 1), (short) (w - 1)));
->>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
+
+        // Disable Ctrl+C
+        IntByReference mode = new IntByReference();
+        WinCon.INSTANCE.GetConsoleMode(hStdInput_, mode);
+        WinCon.INSTANCE.SetConsoleMode(hStdInput_, mode.getValue() & ~WinCon.ENABLE_PROCESSED_INPUT);
     }
 
     static short convert(Color fg, Color bg) {

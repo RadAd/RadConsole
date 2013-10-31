@@ -102,14 +102,14 @@ public interface WinCon extends StdCallLibrary {
             INPUT_RECORD[] out_lpBuffer, int in_nLength,
             IntByReference out_lpNumberOfEventsRead) throws LastErrorException;
 
-<<<<<<< HEAD
     // BOOL WINAPI SetConsoleCtrlHandler(
     // _In_opt_  PHANDLER_ROUTINE HandlerRoutine,
     // _In_      BOOL Add);
-    void SetConsoleCtrlHandler(
-        Pointer in_opt_HandlerRoutine,
-        boolean in_Add)
-=======
+    public void SetConsoleCtrlHandler(
+            Pointer in_opt_HandlerRoutine,
+            boolean in_Add)
+            throws LastErrorException;
+
     // BOOL WINAPI ReadConsoleOutput(
     // _In_     HANDLE hConsoleOutput,
     // _Out_    PCHAR_INFO lpBuffer,
@@ -136,7 +136,6 @@ public interface WinCon extends StdCallLibrary {
     public void ReadConsoleOutputCharacterA(Pointer in_hConsoleOutput,
             byte[] ouy_lpCharacter, int in_nLength, COORD in_dwReadCoord,
             IntByReference out_lpNumberOfCharsRead)
->>>>>>> ac60ce4bdc64de658a4c40cd616696abbcee0a4c
             throws LastErrorException;
 
     // BOOL WINAPI SetConsoleCursorInfo(
