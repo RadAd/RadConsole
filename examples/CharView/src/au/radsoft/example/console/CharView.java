@@ -9,7 +9,7 @@ import au.radsoft.console.ConsoleUtils;
 
 public class CharView {
     public static void main(String[] args) throws Exception {
-        ConsoleUtils.realloc();
+        //ConsoleUtils.realloc();
         Console console = ConsoleUtils.create("Char View", 80, 25, true);
         console.clear();
         
