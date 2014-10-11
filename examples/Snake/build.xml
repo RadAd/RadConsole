@@ -3,6 +3,7 @@
     <property name="project.displayname"  value="Snake"/>
     <property name="project.mainclass"    value="au.radsoft.snake.Snake"/>
     <property name="project.version"      value="1.0"/>
+    <property name="project.dep"          value="../.."/>
     
     <import file="../../radjava/radjava.xml"/>
     
