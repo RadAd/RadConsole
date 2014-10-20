@@ -3,7 +3,7 @@
 
 package au.radsoft.console;
 
-public interface Console {
+public interface Console extends AutoCloseable {
     boolean isValid();
 
     int getWidth();
