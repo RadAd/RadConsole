@@ -52,7 +52,10 @@ public class Win32Console implements au.radsoft.console.Console {
         height_ = h;
 
         if (WinCon.INSTANCE.GetConsoleWindow() == null)
+        {
+            WinCon.INSTANCE.FreeConsole();
             WinCon.INSTANCE.AllocConsole();
+        }
         // hStdOutput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE);
         // hStdInput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE);
         hStdOutput_ = FileAPI.INSTANCE.CreateFile("CONOUT$",
