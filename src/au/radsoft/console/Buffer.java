@@ -54,6 +54,16 @@ public class Buffer {
             }
     }
 
+    public void fill(int x, int y, int w, int h, CharInfo ci) {
+        for (int dy = 0; dy < h; ++dy)
+            for (int dx = 0; dx < w; ++dx) {
+                final CharInfo cell = get(x + dx, y + dy);
+                if (cell != null) {
+                    cell.set(ci);
+                }
+            }
+    }
+
     public void fill(int x, int y, int w, int h, char c) {
         for (int dy = 0; dy < h; ++dy)
             for (int dx = 0; dx < w; ++dx) {
@@ -96,6 +106,13 @@ public class Buffer {
             cell.c = ch;
             cell.fg = fg;
             cell.bg = bg;
+        }
+    }
+
+    public void write(int x, int y, CharInfo ci) {
+        final CharInfo cell = get(x, y);
+        if (cell != null) {
+            cell.set(ci);
         }
     }
 

@@ -24,6 +24,8 @@ public interface Console extends AutoCloseable {
 
     void fill(int x, int y, int w, int h, char c, Color fg, Color bg);
 
+    void fill(int x, int y, int w, int h, CharInfo ci);
+
     void fill(int x, int y, int w, int h, char c);
 
     void fill(int x, int y, int w, int h, Color fg, Color bg);
@@ -31,6 +33,8 @@ public interface Console extends AutoCloseable {
     void write(int x, int y, char ch);
     
     void write(int x, int y, char ch, Color fg, Color bg);
+    
+    void write(int x, int y, CharInfo ci);
 
     void write(int x, int y, String s);
     

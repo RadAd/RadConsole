@@ -603,6 +603,13 @@ public class ConsoleCanvas extends java.awt.Canvas implements au.radsoft.console
 
     @Override
     // from au.radsoft.console.Console
+    public void fill(int x, int y, int w, int h, CharInfo ci) {
+        asciiData_.fill(x, y, w, h, ci);
+        repaint();
+    }
+
+    @Override
+    // from au.radsoft.console.Console
     public void fill(int x, int y, int w, int h, char c) {
         asciiData_.fill(x, y, w, h, c);
         repaint();
@@ -626,6 +633,13 @@ public class ConsoleCanvas extends java.awt.Canvas implements au.radsoft.console
     // from au.radsoft.console.Console
     public void write(int x, int y, char ch, Color fg, Color bg) {
         asciiData_.write(x, y, ch, fg, bg);
+        repaint();
+    }
+
+    @Override
+    // from au.radsoft.console.Console
+    public void write(int x, int y, CharInfo ci) {
+        asciiData_.write(x, y, ci);
         repaint();
     }
 

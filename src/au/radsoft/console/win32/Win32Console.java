@@ -53,7 +53,14 @@ public class Win32Console implements au.radsoft.console.Console {
 
         if (WinCon.INSTANCE.GetConsoleWindow() == null)
         {
-            WinCon.INSTANCE.FreeConsole();
+            try
+            {
+                WinCon.INSTANCE.FreeConsole();
+            }
+            catch (Exception e)
+            {
+                //Ignore exception when used with javaw
+            }
             WinCon.INSTANCE.AllocConsole();
         }
         // hStdOutput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE);
@@ -595,6 +602,13 @@ public class Win32Console implements au.radsoft.console.Console {
             --h;
         }
     }
+    
+    @Override
+    // from au.radsoft.console.Console
+    public void fill(int x, int y, int w, int h, CharInfo ci)
+    {
+        fill(x, y, w, h, ci.c, ci.fg, ci.fg);
+    }
 
     @Override
     // from au.radsoft.console.Console
@@ -658,6 +672,12 @@ public class Win32Console implements au.radsoft.console.Console {
     public void write(int x, int y, char ch, Color fg, Color bg) {
         byte[] chars = { (byte) ch };
         write(x, y, chars, fg, bg);
+    }
+
+    @Override
+    // from au.radsoft.console.Console
+    public void write(int x, int y, CharInfo ci) {
+        write(x, y, ci.c, ci.fg, ci.bg);
     }
 
     @Override
