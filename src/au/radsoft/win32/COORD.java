@@ -20,4 +20,11 @@ public class COORD extends Structure implements Structure.ByValue {
 
     public short X;
     public short Y;
+    
+    private static String[] fieldOrder = { "X", "Y" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

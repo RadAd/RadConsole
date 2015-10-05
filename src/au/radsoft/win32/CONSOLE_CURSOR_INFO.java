@@ -16,4 +16,11 @@ public class CONSOLE_CURSOR_INFO extends Structure {
     public static class ByReference extends CONSOLE_CURSOR_INFO implements
             Structure.ByReference {
     }
+    
+    private static String[] fieldOrder = { "dwSize", "bVisible" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

@@ -26,4 +26,11 @@ public class SMALL_RECT extends Structure {
     public short Top;
     public short Right;
     public short Bottom;
+    
+    private static String[] fieldOrder = { "Left", "Top", "Right", "Bottom" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

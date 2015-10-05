@@ -18,4 +18,11 @@ public class CONSOLE_SCREEN_BUFFER_INFO extends Structure {
     public short      wAttributes;
     public SMALL_RECT srWindow;
     public COORD      dwMaximumWindowSize;
+    
+    private static String[] fieldOrder = { "dwSize", "dwCursorPosition", "wAttributes", "srWindow", "dwMaximumWindowSize" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

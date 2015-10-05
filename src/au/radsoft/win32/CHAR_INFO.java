@@ -32,4 +32,11 @@ public class CHAR_INFO extends Structure {
     public static CHAR_INFO[] createArray(int size) {
         return (CHAR_INFO[]) new CHAR_INFO().toArray(size);
     }
+    
+    private static String[] fieldOrder = { "uChar", "Attributes" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

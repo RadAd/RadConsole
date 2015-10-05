@@ -47,4 +47,11 @@ public class INPUT_RECORD extends Structure {
         }
         super.read();
     }
+    
+    private static String[] fieldOrder = { "EventType", "Event" };
+    
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

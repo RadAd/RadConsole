@@ -23,4 +23,11 @@ public class KEY_EVENT_RECORD extends Structure {
     public short wVirtualScanCode;
     public UnionChar uChar;
     public int dwControlKeyState;
+    
+    private static String[] fieldOrder = { "bKeyDown", "wRepeatCount", "wVirtualKeyCode", "wVirtualScanCode", "uChar", "dwControlKeyState" };
+
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }

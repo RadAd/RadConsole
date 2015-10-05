@@ -27,4 +27,11 @@ public class MOUSE_EVENT_RECORD extends Structure {
     public int dwButtonState;
     public int dwControlKeyState;
     public int dwEventFlags;
+    
+    private static String[] fieldOrder = { "dwMousePosition", "dwButtonState", "dwControlKeyState", "dwEventFlags" };
+
+    @Override
+    protected java.util.List<String> getFieldOrder() {
+        return java.util.Arrays.asList(fieldOrder);
+    }
 }
