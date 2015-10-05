@@ -1,4 +1,4 @@
-jna-*.jar
+examples/*/libs/jna-*.jar
 classes/
 
 #################
