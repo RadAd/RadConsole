@@ -1,3 +1,4 @@
+jna-*.jar
 classes/
 
 #################
@@ -163,4 +164,3 @@ pip-log.txt
 
 # Mac crap
 .DS_Store
-examples/CharView/libs/jna-4.2.0.jar
