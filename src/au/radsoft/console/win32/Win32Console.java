@@ -741,7 +741,7 @@ public class Win32Console implements au.radsoft.console.Console {
         for (int xx = 0; xx < b.getWidth(); ++xx) {
             for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
-                int i = xx + yy * getWidth();
+                int i = xx + yy * b.getWidth();
                 cell.c = (char) chars[i].uChar.AsciiChar;
                 cell.fg = convertFg(chars[i].Attributes);
                 cell.bg = convertBg(chars[i].Attributes);
