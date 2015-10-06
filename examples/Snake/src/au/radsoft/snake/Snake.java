@@ -33,7 +33,7 @@ class Snake
         console.clear();
         drawBox(console, Color.WHITE, Color.BLACK);
         
-        while (!exit)
+        while (!exit && console.isValid())
         {
             console.fill(0, 0, console.getWidth(), console.getHeight(), Color.GRAY, Color.BLACK);
             
@@ -122,7 +122,7 @@ class Snake
         } while (p.equals(q) || v.contains(q));
         console.write(q.x, q.y, target.c, target.fg, target.bg);
         
-        while (!exit)
+        while (!exit && console.isValid())
         {
             km.getKeys(console, 300 - (20 * v.size()));
             

@@ -29,6 +29,8 @@ public final class Point2d
     @Override
     public boolean equals(Object o)
     {
+        if (o == null) return false;
+        if (o == this) return true;
         if (o instanceof Point2d)
             return equals((Point2d) o);
         else

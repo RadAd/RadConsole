@@ -41,6 +41,8 @@ public interface Console extends AutoCloseable {
     void write(int x, int y, String s, Color fg, Color bg);
     
     void write(int x, int y, Buffer b);
+    
+    void write(int dx, int dy, Buffer b, int sx, int sy, int sw, int sh);
 
     void read(int x, int y, Buffer b);
     

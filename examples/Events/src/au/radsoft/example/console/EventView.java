@@ -15,7 +15,7 @@ public class EventView {
         console.enableMouse(true);
         
         boolean exit = false;
-        while (!exit)
+        while (!exit && console.isValid())
         {
             Event event = console.getEvent();
             console.clear();

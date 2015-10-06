@@ -35,7 +35,7 @@ public class CharView {
         
         console.write(19, 1, b);
         
-        while (console.getKey() == null)
+        while (console.getKey() == null && console.isValid())
             ;
         console.close();
     }

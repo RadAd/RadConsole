@@ -8,6 +8,7 @@ import au.radsoft.console.ConsoleUtils;
 import au.radsoft.console.Buffer;
 
 import au.radsoft.geom.Point2d;
+import au.radsoft.geom.Rect2d;
 
 class Tetris
 {
@@ -24,7 +25,6 @@ class Tetris
         {
             console.showCursor(false);
         
-            tetris(console);
             tetris(console);
         }
         finally
@@ -66,6 +66,39 @@ class Tetris
         return false;
     }
     
+    static DirtyRectangles compare(Buffer dest, Buffer src)
+    {
+        assert(dest.getWidth() == src.getWidth());
+        assert(dest.getHeight() == src.getHeight());
+        
+        DirtyRectangles dr = new DirtyRectangles();
+        for (int y = 0; y < dest.getHeight(); ++y)
+        {
+            int start = -1;
+            for (int x = 0; x < dest.getWidth(); ++x)
+            {
+                if (start == -1)
+                {
+                    if (!dest.get(x, y).equals(src.get(x, y)))
+                        start = x;
+                }
+                else
+                {
+                    if (dest.get(x, y).equals(src.get(x, y)))
+                    {
+                        dr.add(new Rect2d(start, y, x - start, 1));
+                        start = -1;
+                    }
+                }
+            }
+            if (start != -1)
+            {
+                dr.add(new Rect2d(start, y, dest.getWidth() - start, 1));
+            }
+        }
+        return dr;
+    }
+    
     static void tetris(Console console)
     {
         boolean exit = false;
@@ -74,6 +107,7 @@ class Tetris
         java.util.Random r = new java.util.Random();
         Buffer b = new Buffer(console.getWidth() - 5, console.getHeight());
         Buffer db = new Buffer(console.getWidth(), console.getHeight());
+        Buffer cb = new Buffer(db.getWidth(), db.getHeight());
         
         db.fill(b.getWidth(), 0, db.getWidth() - b.getWidth(), b.getHeight(), ' ', Color.WHITE, Color.LIGHT_GRAY);
         
@@ -94,7 +128,7 @@ class Tetris
         Point2d p = new Point2d(b.getWidth()/2, 1);
         long t = System.currentTimeMillis() + speed;
         
-        while (!exit)
+        while (!exit && console.isValid())
         {
             Point2d[] n = o[oi].render(p, or);
             db.write(0, 0, b);
@@ -102,7 +136,19 @@ class Tetris
             {
                 db.write(pb.x, pb.y, (char) 254, o[oi].c, o[oi].c2);
             }
-            console.write(0, 0, db);
+            if (false)
+                console.write(0, 0, db);
+            else
+            {
+                DirtyRectangles dr = compare(cb, db);
+                for (Rect2d rect : dr.get())
+                {
+                    cb.write(rect.x, rect.y, db, rect.x, rect.y, rect.w, rect.h);
+                    console.write(rect.x, rect.y, db, rect.x, rect.y, rect.w, rect.h);
+                }
+                compare(cb, db);
+                if (!cb.equals(db)) throw new RuntimeException();
+            }
             
             boolean sit = hit(b, n, down);
         

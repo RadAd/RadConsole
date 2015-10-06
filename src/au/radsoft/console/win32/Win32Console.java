@@ -710,6 +710,25 @@ public class Win32Console implements au.radsoft.console.Console {
                 new COORD((short) 0, (short) 0),
                 new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
     }
+
+    @Override
+    // from au.radsoft.console.Console
+    public void write(int dx, int dy, Buffer b, int sx, int sy, int sw, int sh) {
+        CHAR_INFO[] chars = CHAR_INFO.createArray(sw * sh);
+        for (int xx = sx; xx < (sx + sw); ++xx) {
+            for (int yy = sy; yy < (sy + sh); ++yy) {
+                final CharInfo cell = b.get(xx, yy);
+                int i = (xx - sx) + (yy - sy) * sw;
+                // chars[i] = new CHAR_INFO(cell.c, convert(cell.fg, cell.bg));
+                chars[i].uChar.set((byte) cell.c);
+                chars[i].Attributes = convert(cell.fg, cell.bg);
+            }
+        }
+        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
+                new COORD((short) sw, (short) sh),
+                new COORD((short) 0, (short) 0),
+                new SMALL_RECT((short) dy, (short) dx, (short) (dy + sh), (short) (dx + sw)));
+    }
     
     @Override
     // from au.radsoft.console.Console
@@ -722,7 +741,7 @@ public class Win32Console implements au.radsoft.console.Console {
         for (int xx = 0; xx < b.getWidth(); ++xx) {
             for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
-                int i = xx + yy * b.getWidth();
+                int i = xx + yy * getWidth();
                 cell.c = (char) chars[i].uChar.AsciiChar;
                 cell.fg = convertFg(chars[i].Attributes);
                 cell.bg = convertBg(chars[i].Attributes);

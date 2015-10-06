@@ -27,14 +27,31 @@ public class CharInfo {
         return c == o.c && fg == o.fg && bg == o.bg;
     }
     
+    @Override
     public boolean equals(Object o)
     {
+        if (o == null) return false;
+        if (o == this) return true;
         if (o instanceof CharInfo)
             return equals((CharInfo) o);
         else
             return false;
         
     }
+    
+    @Override
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+        result.append(super.toString());
+        result.append("(c=" + (int)c);
+        result.append(", fg=" + fg);
+        result.append(", bg=" + bg);
+        result.append(')');
+        return result.toString();
+    }
+    
+    // TODO Hash
     
     public char c;
     public Color fg;

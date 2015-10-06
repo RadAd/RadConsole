@@ -161,4 +161,38 @@ public class Buffer {
             }
         }
     }
+
+    public void write(int dx, int dy, Buffer b, int sx, int sy, int sw, int sh) {
+        for (int xx = sx; xx < (sx + sw); ++xx) {
+            for (int yy = sy; yy < (sy + sh); ++yy) {
+                final CharInfo dstcell = get(xx - sx + dx, yy - sy + dy);
+                if (dstcell != null) {
+                    final CharInfo srccell = b.get(xx, yy);
+                    if (srccell != null) {
+                        dstcell.set(srccell);
+                    }
+                }
+            }
+        }
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o == this) return true;
+        if (!(o instanceof Buffer)) return false;
+        Buffer b = (Buffer) o;
+        return java.util.Arrays.deepEquals(data_, b.data_);
+        
+        //if (getWidth() != b.getWidth())
+            //return false;
+        //if (getHeight() != b.getHeight())
+            //return false;
+        //for (int y = 0; y < getHeight(); ++y)
+            //for (int x = 0; x < getWidth(); ++x) {
+                //if (!get(x, y).equals(b.get(x, y)))
+                    //return false;
+            //}
+        //return true;
+    }
 };
