@@ -25,6 +25,8 @@ import au.radsoft.console.Event;
 import au.radsoft.console.Buffer;
 
 public class Win32Console implements au.radsoft.console.Console {
+    private final static boolean useUnicode = false;
+
     private final CONSOLE_SCREEN_BUFFER_INFO savedcsbi_ = new CONSOLE_SCREEN_BUFFER_INFO();
     private final Pointer hStdOutput_;
     private final Pointer hStdInput_;
@@ -663,15 +665,31 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void write(int x, int y, char ch) {
-        byte[] chars = { (byte) ch };
-        write(x, y, chars);
+        if (useUnicode)
+        {
+            char[] chars = { ch };
+            write(x, y, chars);
+        }
+        else
+        {
+            byte[] chars = { (byte) ch };
+            write(x, y, chars);
+        }
     }
 
     @Override
     // from au.radsoft.console.Console
     public void write(int x, int y, char ch, Color fg, Color bg) {
-        byte[] chars = { (byte) ch };
-        write(x, y, chars, fg, bg);
+        if (useUnicode)
+        {
+            char[] chars = { ch };
+            write(x, y, chars, fg, bg);
+        }
+        else
+        {
+            byte[] chars = { (byte) ch };
+            write(x, y, chars, fg, bg);
+        }
     }
 
     @Override
@@ -683,13 +701,19 @@ public class Win32Console implements au.radsoft.console.Console {
     @Override
     // from au.radsoft.console.Console
     public void write(int x, int y, String s) {
-        write(x, y, s.toCharArray());
+        if (useUnicode)
+            write(x, y, s.toCharArray());
+        else
+            write(x, y, s.getBytes(java.nio.charset.Charset.forName("UTF-8")));
     }
 
     @Override
     // from au.radsoft.console.Console
     public void write(int x, int y, String s, Color fg, Color bg) {
-        write(x, y, s.toCharArray(), fg, bg);
+        if (useUnicode)
+            write(x, y, s.toCharArray(), fg, bg);
+        else
+            write(x, y, s.getBytes(java.nio.charset.Charset.forName("UTF-8")), fg, bg);
     }
 
     @Override
@@ -700,15 +724,34 @@ public class Win32Console implements au.radsoft.console.Console {
             for (int yy = 0; yy < b.getHeight(); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
                 int i = xx + yy * b.getWidth();
-                // chars[i] = new CHAR_INFO(cell.c, convert(cell.fg, cell.bg));
-                chars[i].uChar.set((byte) cell.c);
+                if (useUnicode)
+                    chars[i].uChar.set(cell.c);
+                else
+                    chars[i].uChar.set((byte) cell.c);
                 chars[i].Attributes = convert(cell.fg, cell.bg);
             }
         }
-        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
-                new COORD((short) b.getWidth(), (short) b.getHeight()),
-                new COORD((short) 0, (short) 0),
-                new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
+        if (useUnicode)
+            WinCon.INSTANCE.WriteConsoleOutput(hStdOutput_, chars,
+                    new COORD((short) b.getWidth(), (short) b.getHeight()),
+                    new COORD((short) 0, (short) 0),
+                    new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
+        else
+            WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
+                    new COORD((short) b.getWidth(), (short) b.getHeight()),
+                    new COORD((short) 0, (short) 0),
+                    new SMALL_RECT((short) y, (short) x, (short) (y + b.getHeight()), (short) (x + b.getWidth())));
+
+        if (true)
+        {   // Bug on some computers where c < 32 doesn't show correctly
+            for (int xx = 0; xx < b.getWidth(); ++xx) {
+                for (int yy = 0; yy < b.getHeight(); ++yy) {
+                    final CharInfo cell = b.get(xx, yy);
+                    if (cell.c < 32)
+                        write(x + xx, y + yy, cell.c, cell.fg, cell.bg);
+                }
+            }
+        }
     }
 
     @Override
@@ -719,15 +762,34 @@ public class Win32Console implements au.radsoft.console.Console {
             for (int yy = sy; yy < (sy + sh); ++yy) {
                 final CharInfo cell = b.get(xx, yy);
                 int i = (xx - sx) + (yy - sy) * sw;
-                // chars[i] = new CHAR_INFO(cell.c, convert(cell.fg, cell.bg));
-                chars[i].uChar.set((byte) cell.c);
+                if (useUnicode)
+                    chars[i].uChar.set(cell.c);
+                else
+                    chars[i].uChar.set((byte) cell.c);
                 chars[i].Attributes = convert(cell.fg, cell.bg);
             }
         }
-        WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
-                new COORD((short) sw, (short) sh),
-                new COORD((short) 0, (short) 0),
-                new SMALL_RECT((short) dy, (short) dx, (short) (dy + sh), (short) (dx + sw)));
+        if (useUnicode)
+            WinCon.INSTANCE.WriteConsoleOutput(hStdOutput_, chars,
+                    new COORD((short) sw, (short) sh),
+                    new COORD((short) 0, (short) 0),
+                    new SMALL_RECT((short) dy, (short) dx, (short) (dy + sh), (short) (dx + sw)));
+        else
+            WinCon.INSTANCE.WriteConsoleOutputA(hStdOutput_, chars,
+                    new COORD((short) sw, (short) sh),
+                    new COORD((short) 0, (short) 0),
+                    new SMALL_RECT((short) dy, (short) dx, (short) (dy + sh), (short) (dx + sw)));
+                    
+        if (true)
+        {   // Bug on some computers where c < 32 doesn't show correctly
+            for (int xx = sx; xx < (sx + sw); ++xx) {
+                for (int yy = sy; yy < (sy + sh); ++yy) {
+                    final CharInfo cell = b.get(xx, yy);
+                    if (cell.c < 32)
+                        write(dx + xx, dy + yy, cell.c, cell.fg, cell.bg);
+                }
+            }
+        }
     }
     
     @Override

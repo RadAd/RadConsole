@@ -14,6 +14,7 @@ public interface WinCon extends StdCallLibrary {
     public static final String name = "kernel32";
     public static final WinCon INSTANCE = (WinCon) Native.loadLibrary(name,
             WinCon.class, W32APIOptions.UNICODE_OPTIONS);
+            //WinCon.class, W32APIOptions.ASCII_OPTIONS);
 
     public static final int STD_INPUT_HANDLE = -10;
     public static final int STD_OUTPUT_HANDLE = -11;
