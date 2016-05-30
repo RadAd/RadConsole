@@ -696,6 +696,10 @@ public class ConsoleCanvas extends java.awt.Canvas implements au.radsoft.console
             key = CharKey.MOUSE_MOVED;;
         }
         
+        public void handle(Event.WindowBufferSize wbse)
+        {
+        }
+        
         CharKey key = null;
     }
         

@@ -17,6 +17,7 @@ import au.radsoft.win32.SMALL_RECT;
 import au.radsoft.win32.FileAPI;
 import au.radsoft.win32.WinCon;
 import au.radsoft.win32.WinUser;
+import au.radsoft.win32.WINDOW_BUFFER_SIZE_RECORD;
 
 import au.radsoft.console.CharInfo;
 import au.radsoft.console.CharKey;
@@ -42,18 +43,21 @@ public class Win32Console implements au.radsoft.console.Console {
         WinCon.INSTANCE.AllocConsole();
     }
 
-    public static Win32Console create(String title, int w, int h) {
+    public static Win32Console create(String title, int w, int h, boolean realloc) {
         if (WinCon.INSTANCE == null || WinUser.INSTANCE == null)
             return null;
         else
-            return new Win32Console(title, w, h);
+            return new Win32Console(title, w, h, realloc);
     }
 
-    public Win32Console(String title, int w, int h) {
+    public Win32Console(String title, int w, int h, boolean realloc) {
         width_ = w;
         height_ = h;
 
-        if (WinCon.INSTANCE.GetConsoleWindow() == null)
+        //System.err.println("STD_OUTPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.STD_OUTPUT_HANDLE));
+        //System.err.println("STD_INPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.STD_INPUT_HANDLE));
+        
+        if (realloc || WinCon.INSTANCE.GetConsoleWindow() == null)
         {
             try
             {
@@ -65,8 +69,8 @@ public class Win32Console implements au.radsoft.console.Console {
             }
             WinCon.INSTANCE.AllocConsole();
         }
-        // hStdOutput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE);
-        // hStdInput_ = WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE);
+        // hStdOutput_ = WinCon.INSTANCE.GetStdHandle(WinCon.STD_OUTPUT_HANDLE);
+        // hStdInput_ = WinCon.INSTANCE.GetStdHandle(WinCon.STD_INPUT_HANDLE);
         hStdOutput_ = FileAPI.INSTANCE.CreateFile("CONOUT$",
                 FileAPI.GENERIC_READ | FileAPI.GENERIC_WRITE,
                 FileAPI.FILE_SHARE_WRITE, Pointer.NULL, FileAPI.OPEN_EXISTING,
@@ -77,8 +81,9 @@ public class Win32Console implements au.radsoft.console.Console {
                 0, Pointer.NULL);
         //System.err.println("hStdOutput_: " + hStdOutput_);
         //System.err.println("hStdInput_: " + hStdInput_);
-        //System.err.println("STD_OUTPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_OUTPUT_HANDLE));
-        //System.err.println("STD_INPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.INSTANCE.STD_INPUT_HANDLE));
+        //System.err.println("STD_OUTPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.STD_OUTPUT_HANDLE));
+        //System.err.println("STD_INPUT_HANDLE: " + WinCon.INSTANCE.GetStdHandle(WinCon.STD_INPUT_HANDLE));
+        //getKey();
 
         WinCon.INSTANCE.GetConsoleScreenBufferInfo(hStdOutput_, savedcsbi_);
         //WinCon.INSTANCE.SetConsoleCP((short) 437);
@@ -94,7 +99,7 @@ public class Win32Console implements au.radsoft.console.Console {
         // Disable Ctrl+C
         IntByReference mode = new IntByReference();
         WinCon.INSTANCE.GetConsoleMode(hStdInput_, mode);
-        WinCon.INSTANCE.SetConsoleMode(hStdInput_, mode.getValue() & ~WinCon.ENABLE_PROCESSED_INPUT);
+        WinCon.INSTANCE.SetConsoleMode(hStdInput_, (mode.getValue() | WinCon.ENABLE_WINDOW_INPUT) & ~WinCon.ENABLE_PROCESSED_INPUT);
     }
 
     static short convert(Color fg, Color bg) {
@@ -820,7 +825,7 @@ public class Win32Console implements au.radsoft.console.Console {
             WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
-                case  INPUT_RECORD.KEY_EVENT:
+                case INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     if (ke.bKeyDown)
                         return convertKey(ke.wVirtualKeyCode);
@@ -859,7 +864,7 @@ public class Win32Console implements au.radsoft.console.Console {
             WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
-                case  INPUT_RECORD.KEY_EVENT:
+                case INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     if (ke.bKeyDown)
                         return convertKey(ke.wVirtualKeyCode);
@@ -899,7 +904,7 @@ public class Win32Console implements au.radsoft.console.Console {
             WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
-                case  INPUT_RECORD.KEY_EVENT:
+                case INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     return new Event.Key(convertKey(ke.wVirtualKeyCode), ke.bKeyDown ? Event.State.PRESSED : Event.State.RELEASED);
                     
@@ -927,6 +932,10 @@ public class Win32Console implements au.radsoft.console.Console {
                     else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
                         return new Event.MouseMoved(mousex_, mousey_);
                     break;
+                    
+                case INPUT_RECORD.WINDOW_BUFFER_SIZE_EVENT:
+                    WINDOW_BUFFER_SIZE_RECORD wbse = ir[i].Event.WindowBufferSizeEvent;
+                    return new Event.WindowBufferSize(wbse.dwSize.X, wbse.dwSize.Y);
                 }
             }
         }
@@ -942,7 +951,7 @@ public class Win32Console implements au.radsoft.console.Console {
             WinCon.INSTANCE.ReadConsoleInput(hStdInput_, ir, ir.length, r);
             for (int i = 0; i < r.getValue(); ++i) {
                 switch (ir[i].EventType) {
-                case  INPUT_RECORD.KEY_EVENT:
+                case INPUT_RECORD.KEY_EVENT:
                     KEY_EVENT_RECORD ke = ir[i].Event.KeyEvent;
                     return new Event.Key(convertKey(ke.wVirtualKeyCode), ke.bKeyDown ? Event.State.PRESSED : Event.State.RELEASED);
                     
@@ -970,6 +979,10 @@ public class Win32Console implements au.radsoft.console.Console {
                     else if ((me.dwEventFlags & MOUSE_EVENT_RECORD.MOUSE_MOVED) != 0)
                         return new Event.MouseMoved(mousex_, mousey_);
                     break;
+                    
+                case INPUT_RECORD.WINDOW_BUFFER_SIZE_EVENT:
+                    WINDOW_BUFFER_SIZE_RECORD wbse = ir[i].Event.WindowBufferSizeEvent;
+                    return new Event.WindowBufferSize(wbse.dwSize.X, wbse.dwSize.Y);
                 }
             }
             WinCon.INSTANCE.GetNumberOfConsoleInputEvents(hStdInput_, r);

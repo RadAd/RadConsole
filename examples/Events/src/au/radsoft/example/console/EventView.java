@@ -10,6 +10,7 @@ import au.radsoft.console.Event;
 
 public class EventView {
     public static void main(String[] args) throws Exception {
+        //ConsoleUtils.WIN32_REALLOC = true;
         Console console = ConsoleUtils.create("Events", 80, 25, true);
         console.clear();
         console.enableMouse(true);

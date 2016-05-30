@@ -14,6 +14,7 @@ public interface Event
         void handle(Key ke);
         void handle(MouseButton mbe);
         void handle(MouseMoved mme);
+        void handle(WindowBufferSize wbse);
         // TODO This isnt easily extendable
     }
     
@@ -84,6 +85,35 @@ public interface Event
     public static class MouseMoved implements Event
     {
         public MouseMoved(int mx, int my)
+        {
+            this.mx = mx;
+            this.my = my;
+        }
+        
+        @Override
+        public void handle(Handler h)
+        {
+            h.handle(this);
+        }
+        
+        @Override
+        public String toString()
+        {
+            StringBuilder result = new StringBuilder();
+            result.append(super.toString());
+            result.append("(mx=" + mx);
+            result.append(", my=" + my);
+            result.append(')');
+            return result.toString();
+        }
+        
+        public final int mx;
+        public final int my;
+    }
+
+    public static class WindowBufferSize implements Event
+    {
+        public WindowBufferSize(int mx, int my)
         {
             this.mx = mx;
             this.my = my;

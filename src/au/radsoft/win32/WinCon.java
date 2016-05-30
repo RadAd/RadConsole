@@ -35,7 +35,7 @@ public interface WinCon extends StdCallLibrary {
     public Pointer GetStdHandle(int nStdHandle);
 
     // BOOL WINAPI AllocConsole(void);
-    void AllocConsole() throws LastErrorException;
+    void AllocConsole();
 
     // BOOL WINAPI FreeConsole(void);
     void FreeConsole() throws LastErrorException;

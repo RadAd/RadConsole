@@ -29,7 +29,7 @@ public class INPUT_RECORD extends Structure {
     public static class EventUnion extends Union {
         public KEY_EVENT_RECORD KeyEvent;
         public MOUSE_EVENT_RECORD MouseEvent;
-        // WINDOW_BUFFER_SIZE_RECORD WindowBufferSizeEvent;
+        public WINDOW_BUFFER_SIZE_RECORD WindowBufferSizeEvent;
         // MENU_EVENT_RECORD MenuEvent;
         // FOCUS_EVENT_RECORD FocusEvent;
     }
@@ -43,6 +43,9 @@ public class INPUT_RECORD extends Structure {
             break;
         case MOUSE_EVENT:
             Event.setType(MOUSE_EVENT_RECORD.class);
+            break;
+        case WINDOW_BUFFER_SIZE_EVENT:
+            Event.setType(WINDOW_BUFFER_SIZE_RECORD.class);
             break;
         }
         super.read();

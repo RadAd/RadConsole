@@ -7,10 +7,12 @@ import au.radsoft.console.javase.ConsoleCanvas;
 import au.radsoft.console.win32.Win32Console;
 
 public class ConsoleUtils {
+    public static boolean WIN32_REALLOC = false;
+    
     public static Console create(String title, int w, int h, boolean usenative)
             throws java.io.IOException
     {
-        Console c = usenative ? Win32Console.create(title, w, h) : null;
+        Console c = usenative ? Win32Console.create(title, w, h, WIN32_REALLOC) : null;
         if (c == null)
             c = ConsoleCanvas.create(title, w, h);
         return c;
