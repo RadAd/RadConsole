@@ -1,4 +1,4 @@
-RadConsole [![GitHub tag](https://img.shields.io/github/tag/RadAd/RadConsole.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/tags) [![GitHub tag](https://img.shields.io/github/release/RadAd/RadConsole.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/releases) [![GitHub tag](https://img.shields.io/github/commits-since/RadAd/RadConsole/30102013.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/commits/master)
+RadConsole [![GitHub tag](https://img.shields.io/github/release/RadAd/RadConsole.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/releases) [![GitHub tag](https://img.shields.io/github/commits-since/RadAd/RadConsole/30102013.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/commits/master)
 ==========
 
 A Java api for a win32-like console.
