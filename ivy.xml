@@ -1,0 +1,11 @@
+<ivy-module version="2.0">
+    <info organisation="RadSoft" module="RadConsole"/>
+    
+    <configurations defaultconfmapping="default">
+        <conf name="default"/>
+    </configurations>
+
+    <dependencies>
+        <dependency org="net.java.dev.jna" name="jna" rev="4.2.2"/>
+    </dependencies>
+</ivy-module>
