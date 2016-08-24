@@ -1,4 +1,4 @@
-RadConsole [![GitHub tag](https://img.shields.io/github/release/RadAd/RadConsole.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/releases) [![GitHub tag](https://img.shields.io/github/commits-since/RadAd/RadConsole/30102013.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/commits/master)
+RadConsole [![GitHub tag](https://img.shields.io/github/release/RadAd/RadConsole.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/releases) [![GitHub commits](https://img.shields.io/github/commits-since/RadAd/RadConsole/30102013.svg?maxAge=2592000)](https://github.com/RadAd/RadConsole/commits/master)
 ==========
 
 A Java api for a win32-like console.
@@ -9,4 +9,6 @@ Create an instance:
 
     Console console = ConsoleUtils.create("Test", 80, 25, true);
 
-Dependency: [Java Native Access](https://github.com/twall/jna).
+Dependencies
+------------
+[Java Native Access](https://github.com/twall/jna) [![Maven](https://img.shields.io/maven-central/v/net.java.dev.jna/jna.svg?maxAge=2592000)](http://mvnrepository.com/artifact/net.java.dev.jna/jna)
