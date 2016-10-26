@@ -5,5 +5,5 @@ jdk:
 
 build:
   ci:
-    - ant build
+    - ant resolve build
     
