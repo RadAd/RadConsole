@@ -5,5 +5,5 @@ jdk:
 
 build:
   ci:
-    - ant download-ivy resolve build
-    
+    - ant download-ivy
+    - ant resolve build
